@@ -24,23 +24,25 @@
         {% endif %}
 
         {% if site.github.is_user_page %}
-          <p class="view"><a href="{{ site.github.owner_url }}"><i class="fab fa-github"></i></a></p>
-        {% endif %}
-        
-        {% if site.github.is_user_page && site.cv_url %}
-          <p class="view"><a href="{{ site.cv_url }}">Print CV</a></p>
-        {% endif %}
+          <h1>
+            <a href="{{ site.github.owner_url }}"><i class="fab fa-github"></i></a>
 
-        {% if site.github.is_user_page && site.linkedin_url %}
-          <p class="view"><a href="{{ site.linkedin_url }}"><i class="fab fa-linkedin"></i></a></p>
-        {% endif %}
+            {% if site.linkedin_url %}
+              <a href="{{ site.linkedin_url }}"><i class="fab fa-linkedin"></i></a>
+            {% endif %}
 
-        {% if site.github.is_user_page && site.stack_overflow_url %}
-          <p class="view"><a href="{{ site.stack_overflow_url }}"><i class="fab fa-stack-overflow"></i></a></p>
-        {% endif %}
+            {% if site.stack_overflow_url %}
+              <a href="{{ site.stack_overflow_url }}"><i class="fab fa-stack-overflow"></i></a>
+            {% endif %}
 
-        {% if site.github.is_user_page && site.facebook_url %}
-          <p class="view"><a href="{{ site.facebook_url }}"><i class="fab fa-facebook-square"></i></a></p>
+            {% if site.facebook_url %}
+              <a href="{{ site.facebook_url }}"><i class="fab fa-facebook-square"></i></a>
+            {% endif %}
+          </h1>
+
+          {% if site.cv_url %}
+            <p class="view"><a href="{{ site.cv_url }}">Print My CV</a></p>
+          {% endif %}
         {% endif %}
 
         {% if site.show_downloads %}
