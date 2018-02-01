@@ -24,7 +24,23 @@
         {% endif %}
 
         {% if site.github.is_user_page %}
-          <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
+          <p class="view"><a href="{{ site.github.owner_url }}"><i class="fab fa-github"></i></a></p>
+        {% endif %}
+        
+        {% if site.github.is_user_page && site.cv_url %}
+          <p class="view"><a href="{{ site.cv_url }}">Print CV</a></p>
+        {% endif %}
+
+        {% if site.github.is_user_page && site.linkedin_url %}
+          <p class="view"><a href="{{ site.linkedin_url }}"><i class="fab fa-linkedin"></i></a></p>
+        {% endif %}
+
+        {% if site.github.is_user_page && site.stack_overflow_url %}
+          <p class="view"><a href="{{ site.stack_overflow_url }}"><i class="fab fa-stack-overflow"></i></a></p>
+        {% endif %}
+
+        {% if site.github.is_user_page && site.facebook_url %}
+          <p class="view"><a href="{{ site.facebook_url }}"><i class="fab fa-facebook-square"></i></a></p>
         {% endif %}
 
         {% if site.show_downloads %}
@@ -36,21 +52,6 @@
         {% endif %}
       </header>
       <section>
-        <h1>Social Media</h1>
-        <div>
-            <a href="https://www.linkedin.com/in/vardius">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="https://github.com/Vardius">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="http://stackoverflow.com/users/2160958/vardius">
-                <i class="fab fa-stack-overflow"></i>
-            </a>
-            <a href="https://www.facebook.com/vardius">
-                <i class="fab fa-facebook-official"></i>
-            </a>
-        </div>
 
       {{ content }}
 
