@@ -1,4 +1,6 @@
 # Rafał Lorenz
+[![profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites](https://stackexchange.com/users/flair/2481586.png "profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites")](https://stackexchange.com/users/2481586)
+
 Please find all my work on [Github Profile](https://github.com/vardius)
 
 ## Some of my work:
@@ -9,6 +11,10 @@ Please find all my work on [Github Profile](https://github.com/vardius)
  - [message-bus](http://rafallorenz.com/message-bus) - Go simple async message bus
  - [golog](http://rafallorenz.com/golog) - Go logger
  - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=go)
+
+### TypeScript
+ - [peer-data](http://rafallorenz.com/peer-data) - Library for files, media streaming/sharing using WebRTC
+ - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=typescript)
 
 ### Javascript
  - [peer-cdn](http://rafallorenz.com/peer-cdn) - Lightweight library providing peer to peer CDN functionality
