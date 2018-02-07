@@ -1,9 +1,8 @@
-# Rafał Lorenz
 [![profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites](https://stackexchange.com/users/flair/2481586.png "profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites")](https://stackexchange.com/users/2481586)
 
+## Some of my work:
 Please find all my work on [Github Profile](https://github.com/vardius)
 
-## Some of my work:
 ### Go
  - [go-api-boilerplate](http://rafallorenz.com/go-api-boilerplate) - Go Server/API boilerplate using best practices DDD CQRS ES gRPC
  - [gorouter](http://rafallorenz.com/gorouter) - Go Server/API micro framwework, HTTP request router, multiplexer, mux
