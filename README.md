@@ -9,6 +9,7 @@ Please find all my work on [Github Profile](https://github.com/vardius)
  - [worker-pool](http://rafallorenz.com/worker-pool) - Go simple async worker pool
  - [message-bus](http://rafallorenz.com/message-bus) - Go simple async message bus
  - [golog](http://rafallorenz.com/golog) - Go logger
+ - [blockchain](https://github.com/vardius/blockchain) - Go gRPC blockchain
  - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=go)
 
 ### TypeScript
