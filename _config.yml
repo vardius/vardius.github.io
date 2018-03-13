@@ -17,6 +17,7 @@ resume: http://stackoverflow.com/cv/vardius
 #
 # Flags below are optional
 #
+categories: [go, javascript, typescript, php]
 
 # Includes an icon in the footer for each username you enter
 footer-links:
@@ -26,7 +27,7 @@ footer-links:
   flickr:
   github: vardius
   instagram:
-  linkedin:
+  linkedin: vardius
   pinterest:
   rss: # just type anything here for a working RSS icon
   twitter: vardius

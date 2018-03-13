@@ -1,7 +1,11 @@
 ---
 layout: page
-title: List Bundle
 permalink: /list-bundle/
+title: List Bundle
+description: Provides list builder, list view bundle for Symfony
+comments: true
+project: true
+categories: [php]
 ---
 
 [![Beerpay](https://beerpay.io/vardius/list-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/list-bundle)  [![Beerpay](https://beerpay.io/vardius/list-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/list-bundle?focus=wish)

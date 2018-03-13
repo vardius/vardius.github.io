@@ -1,7 +1,11 @@
 ---
 layout: page
-title: golog
 permalink: /golog/
+title: golog
+description: Go logger
+comments: true
+project: true
+categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/golog.svg?branch=master)](https://travis-ci.org/vardius/golog)

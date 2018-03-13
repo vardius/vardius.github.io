@@ -1,7 +1,11 @@
 ---
 layout: page
-title: Golang API Starter Kit
 permalink: /go-api-boilerplate/
+title: Golang API Starter Kit
+description: Go Server/API boilerplate using best practices DDD CQRS ES gRPC
+comments: true
+project: true
+categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/go-api-boilerplate.svg?branch=master)](https://travis-ci.org/vardius/go-api-boilerplate)

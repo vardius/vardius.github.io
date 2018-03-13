@@ -1,7 +1,11 @@
 ---
 layout: page
-title: worker-pool
 permalink: /worker-pool/
+title: worker-pool
+description: Go simple async worker pool
+comments: true
+project: true
+categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/worker-pool.svg?branch=master)](https://travis-ci.org/vardius/worker-pool)

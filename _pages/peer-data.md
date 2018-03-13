@@ -1,7 +1,11 @@
 ---
 layout: page
-title: peer-data
 permalink: /peer-data/
+title: peer-data
+description: Library for files, media streaming/sharing using WebRTC
+comments: true
+project: true
+categories: [typescript]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/peer-data.svg?branch=master)](https://travis-ci.org/vardius/peer-data)

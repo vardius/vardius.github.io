@@ -1,7 +1,11 @@
 ---
 layout: page
-title: message-bus
 permalink: /message-bus/
+title: message-bus
+description: Go simple async message bus
+comments: true
+project: true
+categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/message-bus.svg?branch=master)](https://travis-ci.org/vardius/message-bus)

@@ -2,6 +2,10 @@
 layout: page
 title: gorouter
 permalink: /gorouter/
+description: Go Server/API micro framwework, HTTP request router, multiplexer, mux
+comments: true
+project: true
+categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/gorouter.svg?branch=master)](https://travis-ci.org/vardius/gorouter)

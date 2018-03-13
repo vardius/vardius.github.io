@@ -1,7 +1,11 @@
 ---
 layout: page
-title: Crud Bundle
 permalink: /crud-bundle/
+title: Crud Bundle
+description: Provides crud actions, crud bundle for Symfony
+comments: true
+project: true
+categories: [php]
 ---
 
 [![Beerpay](https://beerpay.io/vardius/crud-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/crud-bundle)  [![Beerpay](https://beerpay.io/vardius/crud-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/crud-bundle?focus=wish)
