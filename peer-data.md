@@ -4,7 +4,6 @@ title: peer-data
 permalink: /peer-data/
 ---
 
-# PeerData
 [![Build Status](https://travis-ci.org/vardius/peer-data.svg?branch=master)](https://travis-ci.org/vardius/peer-data)
 [![npm version](https://img.shields.io/npm/v/peer-data.svg)](https://www.npmjs.com/package/peer-data)
 [![npm downloads](https://img.shields.io/npm/dm/peer-data.svg)](https://www.npmjs.com/package/peer-data)

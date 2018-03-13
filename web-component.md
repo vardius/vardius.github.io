@@ -4,8 +4,6 @@ title: web-component
 permalink: /web-component/
 ---
 
-# web-component
-
 [![Build Status](https://travis-ci.org/vardius/web-component.svg?branch=master)](https://travis-ci.org/vardius/web-component)
 [![codecov](https://codecov.io/gh/vardius/web-component/branch/master/graph/badge.svg)](https://codecov.io/gh/vardius/web-component)
 [![npm version](https://img.shields.io/npm/v/web-component.svg)](https://www.npmjs.com/package/web-component)

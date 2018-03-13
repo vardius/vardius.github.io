@@ -1,11 +1,9 @@
 ---
 layout: page
-title: crud-bundle
+title: Crud Bundle
 permalink: /crud-bundle/
 ---
 
-Vardius - Crud Bundle
-======================================
 [![Beerpay](https://beerpay.io/vardius/crud-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/crud-bundle)  [![Beerpay](https://beerpay.io/vardius/crud-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/crud-bundle?focus=wish)
 
 Crud Bundle provides crud actions

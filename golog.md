@@ -4,8 +4,6 @@ title: golog
 permalink: /golog/
 ---
 
-Vardius - golog
-================
 [![Build Status](https://travis-ci.org/vardius/golog.svg?branch=master)](https://travis-ci.org/vardius/golog)
 [![](https://godoc.org/github.com/vardius/golog?status.svg)](http://godoc.org/github.com/vardius/golog)
 
