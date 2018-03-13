@@ -9,19 +9,22 @@ permalink: /about/
 ## Some of my work:
 
 {% for cat in site.categories %}
+
 ### {{ cat }}
+
 <ul>
   {% for page in site.pages %}
     {% if page.project == true %}
       {% for pc in page.categories %}
         {% if pc == cat %}
           <li><a href="{{ page.url }}">{{ page.title }}</a> - {{ page.description }}</li>
-        {% endif %}   <!-- cat-match-p -->
-      {% endfor %}  <!-- page-category -->
-    {% endif %}   <!-- resource-p -->
-  {% endfor %}  <!-- page -->
-          <li><a href="https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language={{ cat }}">...and more</a></li>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  <li><a href="https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language={{ cat }}">...and more</a></li>
 </ul>
-{% endfor %}  <!-- cat -->
+
+{% endfor %}
 
 Please find all my work on [Github Profile](https://github.com/vardius)
