@@ -2,7 +2,7 @@
 layout: post
 title: Lightweight library providing peer to peer CDN - beta version!
 comments: true
-categories: javascript
+categories: Javascript
 ---
 
 I have released [**beta** version](https://github.com/vardius/peer-cdn/releases/tag/1.0.0-beta) of my [peer-cdn](https://github.com/vardius/peer-cdn). What I would expect out of this version is **feedback** on the matter of **browser support** and the issues I haven't thing of. This version is released in case of finding out what is need to be done before actual release.

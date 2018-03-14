@@ -3,7 +3,6 @@ layout: page
 permalink: /peer-cdn/
 title: peer-cdn
 description: Lightweight library providing peer to peer CDN functionality
-categories: [javascript]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/peer-cdn.svg?branch=master)](https://travis-ci.org/vardius/peer-cdn)

@@ -3,7 +3,6 @@ layout: page
 permalink: /web-component/
 title: web-component
 description: Lightweight library providing interface for building web components
-categories: [javascript]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/web-component.svg?branch=master)](https://travis-ci.org/vardius/web-component)

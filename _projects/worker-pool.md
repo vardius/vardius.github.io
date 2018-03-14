@@ -3,7 +3,6 @@ layout: page
 permalink: /worker-pool/
 title: worker-pool
 description: Go simple async worker pool
-categories: [go]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/worker-pool.svg?branch=master)](https://travis-ci.org/vardius/worker-pool)

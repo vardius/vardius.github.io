@@ -3,7 +3,6 @@ layout: page
 permalink: /webrtc-chat/
 title: WebRTC Chat
 description: Serverless chat application useing peer to peer WebRTC
-categories: [javascript]
 ---
 
 [![Build Status](https://travis-ci.org/vardius/webrtc-chat.svg?branch=master)](https://travis-ci.org/vardius/webrtc-chat)
