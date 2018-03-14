@@ -3,8 +3,6 @@ layout: page
 permalink: /list-bundle/
 title: List Bundle
 description: Provides list builder, list view bundle for Symfony
-comments: true
-project: true
 categories: [php]
 ---
 

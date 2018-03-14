@@ -3,8 +3,6 @@ layout: page
 title: gorouter
 permalink: /gorouter/
 description: Go Server/API micro framwework, HTTP request router, multiplexer, mux
-comments: true
-project: true
 categories: [go]
 ---
 

@@ -3,8 +3,6 @@ layout: page
 permalink: /peer-cdn/
 title: peer-cdn
 description: Lightweight library providing peer to peer CDN functionality
-comments: true
-project: true
 categories: [javascript]
 ---
 

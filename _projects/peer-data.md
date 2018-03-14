@@ -3,8 +3,6 @@ layout: page
 permalink: /peer-data/
 title: peer-data
 description: Library for files, media streaming/sharing using WebRTC
-comments: true
-project: true
 categories: [typescript]
 ---
 

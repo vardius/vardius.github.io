@@ -4,7 +4,6 @@ permalink: /go-api-boilerplate/
 title: Golang API Starter Kit
 description: Go Server/API boilerplate using best practices DDD CQRS ES gRPC
 comments: true
-project: true
 categories: [go]
 ---
 

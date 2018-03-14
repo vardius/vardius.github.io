@@ -11,14 +11,12 @@ permalink: /about/
 {% for category in site.categories %}
   {% capture category_name %}{{ category | first }}{% endcapture %}
   ### {{ category_name }}
-  {% for page in site.pages %}
-    {% if page.project == true %}
-      {% for pc in page.categories %}
-        {% if pc == category_name %}
-          - [{{ page.title }}]({{ page.url }}) &mdash; {{ page.description }}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
+  {% for project in site.projects %}
+    {% for pc in page.categories %}
+      {% if pc == category_name %}
+        - [{{ page.title }}]({{ page.url }}) &mdash; {{ page.description }}
+      {% endif %}
+    {% endfor %}
   {% endfor %}
     - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language={{ category_name }})
 {% endfor %}

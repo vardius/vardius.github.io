@@ -3,8 +3,6 @@ layout: page
 permalink: /crud-bundle/
 title: Crud Bundle
 description: Provides crud actions, crud bundle for Symfony
-comments: true
-project: true
 categories: [php]
 ---
 

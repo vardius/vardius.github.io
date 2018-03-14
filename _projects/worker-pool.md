@@ -3,8 +3,6 @@ layout: page
 permalink: /worker-pool/
 title: worker-pool
 description: Go simple async worker pool
-comments: true
-project: true
 categories: [go]
 ---
 

@@ -3,8 +3,6 @@ layout: page
 permalink: /web-component/
 title: web-component
 description: Lightweight library providing interface for building web components
-comments: true
-project: true
 categories: [javascript]
 ---
 

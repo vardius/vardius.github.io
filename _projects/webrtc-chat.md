@@ -3,8 +3,6 @@ layout: page
 permalink: /webrtc-chat/
 title: WebRTC Chat
 description: Serverless chat application useing peer to peer WebRTC
-comments: true
-project: true
 categories: [javascript]
 ---
 

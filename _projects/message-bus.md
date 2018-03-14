@@ -3,8 +3,6 @@ layout: page
 permalink: /message-bus/
 title: message-bus
 description: Go simple async message bus
-comments: true
-project: true
 categories: [go]
 ---
 

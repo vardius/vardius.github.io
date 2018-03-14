@@ -3,8 +3,6 @@ layout: page
 permalink: /golog/
 title: golog
 description: Go logger
-comments: true
-project: true
 categories: [go]
 ---
 
