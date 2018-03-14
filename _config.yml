@@ -59,7 +59,7 @@ baseurl: ""
 
 include: ['_pages']
 
-permalink: /:title/
+permalink: /:categories/:title/
 
 collections:
     - projects
