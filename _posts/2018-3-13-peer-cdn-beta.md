@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Lightweight library providing peer to peer CDN - beta version!
+comments: true
 categories: Tech
 ---
 
