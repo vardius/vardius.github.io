@@ -8,7 +8,7 @@ permalink: /about/
 
 ## Some of my work:
 
-{% for cat in site.project-categories %}
+{% for cat in site.categories %}
 ### {{ cat }}
 <ul>
 {% for page in site.pages %}
