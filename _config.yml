@@ -17,6 +17,7 @@ resume: http://stackoverflow.com/cv/vardius
 #
 # Flags below are optional
 #
+project-categories: [go, php, javascript, typescript]
 
 # Includes an icon in the footer for each username you enter
 footer-links:
@@ -58,7 +59,7 @@ baseurl: ""
 
 include: ['_pages', '_projects']
 
-permalink: /:title/
+permalink: /:categories/:title/
 
 # The release of Jekyll Now that you're using
 version: v1.2.0
