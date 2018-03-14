@@ -61,9 +61,6 @@ include: ['_pages', '_projects']
 
 permalink: /:categories/:title/
 
-collections:
-    - projects
-
 # The release of Jekyll Now that you're using
 version: v1.2.0
 
