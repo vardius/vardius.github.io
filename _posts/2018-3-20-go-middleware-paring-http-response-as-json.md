@@ -52,7 +52,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 func main() {
     router := gorouter.New(
 		AsJSON, // our middleware
-	)
+    )
 
     router.GET("/hello/{name}", http.HandlerFunc(Hello))
 
