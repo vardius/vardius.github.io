@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Go middleware - paring HTTP response as json
+title: Go middleware - parsing HTTP response as json
 comments: true
 categories: Go
 ---
