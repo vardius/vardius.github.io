@@ -5,8 +5,6 @@ comments: true
 categories: Go
 ---
 
-# Why middleware ?
-
 When writing HTTP application with Go, parsing a response is the first thing you have to solve. While being future proof, you want to keep it clean and simple. This is where the idea of doing it with a middleware comes in. Middleware solves many problems here. For example:
 1. Single responsibility - meaning that your actual handler doesn't know and it shouldn't, how the response is parsed
 2. Common reuse - allows you to reuse the same logic in an easy way among many handlers
