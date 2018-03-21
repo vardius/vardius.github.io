@@ -13,7 +13,7 @@ When writing HTTP application with Go, parsing a response is the first thing you
 
 ## How should it work ?
 
-Middleware should wrap handlers, which brings the question how should we pass the payload from a handler to a middleware ? Here is where context comes in. Lets see how the end result should look like, based on example below we will implement the API of our package. In our example we will use [gorouter](github.com/vardius/gorouter) this simple router allows as to use middleware and route variables.
+Middleware should wrap handlers, which brings the question how should we pass the payload from a handler to a middleware ? Here is where context comes in. Lets see how the end result should look like, based on example below we will implement the API of our package. In our example we will use [gorouter](https://github.com/vardius/gorouter) this simple router allows as to use middleware and route variables.
 
 ```go
 package main
