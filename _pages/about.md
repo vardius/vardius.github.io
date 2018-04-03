@@ -4,8 +4,6 @@ title: About
 permalink: /about/
 ---
 
-[![profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites](https://stackexchange.com/users/flair/2481586.png "profile for Vardius on Stack Exchange, a network of free, community-driven Q&A sites")](https://stackexchange.com/users/2481586)
-
 ## Some of my work:
 
 ### Go
