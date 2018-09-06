@@ -16,7 +16,7 @@ comments: true
 
 Go Server/API boilerplate using best practices, DDD, CQRS, ES, gRPC.
 
-![Dashboard](https://github.com/vardius/go-api-boilerplate/blob/master/.github/kubernetes-dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/vardius/go-api-boilerplate/master/.github/kubernetes-dashboard.png)
 
 Key concepts:
 1. Rest API
