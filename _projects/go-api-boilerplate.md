@@ -22,11 +22,12 @@ Key concepts:
 1. Rest API
 2. [Docker](https://www.docker.com/what-docker)
 3. [Kubernetes](https://kubernetes.io/)
-4. [gRPC](https://grpc.io/docs/)
-5. [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design)  (DDD)
-6. [CQRS](https://martinfowler.com/bliki/CQRS.html)
-7. [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
-8. [Hexagonal, Onion, Clean Architecture](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/)
+4. [Helm chart](https://helm.sh/)
+5. [gRPC](https://grpc.io/docs/)
+6. [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design)  (DDD)
+7. [CQRS](https://martinfowler.com/bliki/CQRS.html)
+8. [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
+9. [Hexagonal, Onion, Clean Architecture](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/)
 
 Worth getting to know packages used in this boilerplate:
 1. [gorouter](https://github.com/vardius/gorouter)
@@ -64,7 +65,11 @@ docker-rm                      [DOCKER] Stop and then remove docker container. E
 docker-publish                 [DOCKER] Docker publish. Example: `make docker-publish BIN=user REGISTRY=https://your-registry.com`
 docker-tag                     [DOCKER] Tag current container. Example: `make docker-tag BIN=user REGISTRY=https://your-registry.com`
 docker-release                 [DOCKER] Docker release - build, tag and push the container. Example: `make docker-release BIN=user REGISTRY=https://your-registry.com`
-kubernetes-create              [KUBERNETES] Create kubernetes deployment. Example: `make kubernetes-create BIN=user`
+helm-install                   [HELM] Deploy the Helm chart. Example: `make helm-install BIN=user`
+helm-upgrade                   [HELM] Update the Helm chart. Example: `make helm-upgrade BIN=user`
+helm-history                   [HELM] See what revisions have been made to the chart. Example: `make helm-history BIN=user`
+telepresence-swap-local        [TELEPRESENCE] Replace the existing deployment with the Telepresence proxy for local process. Example: `make telepresence-swap-local BIN=user PORT=3000`
+telepresence-swap-docker       [TELEPRESENCE] Replace the existing deployment with the Telepresence proxy for local docker image. Example: `make telepresence-swap-docker BIN=user PORT=3000`
 aws-repo-login                 [HELPER] login to AWS-ECR
 ```
 ### Kubernetes
@@ -78,6 +83,19 @@ kubectl proxy
 ```
 Kubectl will handle authentication with apiserver and make Dashboard available at http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/.
 The UI can only be accessed from the machine where the command is executed. See kubectl proxy --help for more options.
+### Helm charts
+Helm chart are used to automate the application deployment in a Kubernetes cluster. Once the application is deployed and working, it also explores how to modify the source code for publishing a new application release and how to perform rolling updates in Kubernetes using the Helm CLI.
+
+To deploy application on Kubernetes using Helm you will typically follow these steps:
+
+Step 1: Add application to cmd directory
+Step 2: Build the Docker image
+Step 3: Publish the Docker image
+Step 4: Create the Helm Chart
+Step 5: Deploy the application in Kubernetes
+Step 6: Update the source code and the Helm chart
+
+[Install And Configure Helm And Tiller](https://docs.bitnami.com/kubernetes/get-started-kubernetes/#step-4-install-helm-and-tiller)
 ### Vendor
 Build the module. This will automatically add missing or unconverted dependencies as needed to satisfy imports for this particular build invocation
 ```bash
@@ -95,6 +113,50 @@ make docker-build BIN=user
 make kubernetes-create BIN=user
 ```
 This will deploy each of them to the kubernetes cluster using your local docker image (built in first step).
+### STEP 3. Debug
+To debug deployment you can simply use [telepresence](https://www.telepresence.io/reference/install) and swap kubernetes for local go service or local docker image. For example to swap deployment for local docker image run:
+```sh
+make telepresence-swap-docker BIN=user PORT=3001
+```
+This command should swap deployment giving similar output to the one below:
+```
+➜  go-api-boilerplate git:(master) ✗ make telepresence-swap-docker BIN=user PORT=3001
+telepresence \
+	--swap-deployment user-deployment \
+	--docker-run -i -t --rm -p=3001:3001 --name="user" user:latest
+T: Volumes are rooted at $TELEPRESENCE_ROOT. See https://telepresence.io/howto/volumes.html for
+T: details.
+2019/01/10 06:24:37.963250 INFO:  [user CommandBus|Subscribe]: *user.RegisterWithEmail
+2019/01/10 06:24:37.963332 INFO:  [user CommandBus|Subscribe]: *user.RegisterWithGoogle
+2019/01/10 06:24:37.963357 INFO:  [user CommandBus|Subscribe]: *user.RegisterWithFacebook
+2019/01/10 06:24:37.963428 INFO:  [user CommandBus|Subscribe]: *user.ChangeEmailAddress
+2019/01/10 06:24:37.963445 INFO:  [user EventBus|Subscribe]: *user.WasRegisteredWithEmail
+2019/01/10 06:24:37.963493 INFO:  [user EventBus|Subscribe]: *user.WasRegisteredWithGoogle
+2019/01/10 06:24:37.963540 INFO:  [user EventBus|Subscribe]: *user.WasRegisteredWithFacebook
+2019/01/10 06:24:37.963561 INFO:  [user EventBus|Subscribe]: *user.EmailAddressWasChanged
+2019/01/10 06:24:37.964452 INFO:  [user] running at 0.0.0.0:3000
+^C
+2019/01/10 06:30:16.266108 INFO:  [user] shutting down...
+2019/01/10 06:30:16.283392 INFO:  [user] gracefully stopped
+T: Exit cleanup in progress
+# --docker-run --rm -it -v -p=3001:3001 user:latest
+```
+### STEP 4. Test example
+Send example JSON via POST request
+```sh
+curl -d '{"email":"test@test.com"}' -H "Content-Type: application/json" -X POST http://localhost:3000/users/dispatch/register-user-with-email
+```
+**proxy** pod logs should look something like:
+```sh
+2019/01/06 09:37:52.453329 INFO:  [POST Request|Start]: /dispatch/register-user-with-email
+2019/01/06 09:37:52.461655 INFO:  [POST Request|End] /dispatch/register-user-with-email 8.2233ms
+```
+**user** pod logs should look something like:
+```sh
+2019/01/06 09:37:52.459095 DEBUG: [user CommandBus|Publish]: *user.RegisterWithEmail &{Email:test@test.com}
+2019/01/06 09:37:52.459966 DEBUG: [user EventBus|Publish]: *user.WasRegisteredWithEmail {"id":"4270a1ca-bfba-486a-946d-9d7b8a893ea2","email":"test@test.com"}
+2019/01/06 09:37:52 [user EventHandler] {"id":"4270a1ca-bfba-486a-946d-9d7b8a893ea2","email":"test@test.com"}
+```
 ### Documentation
 * [Wiki](https://github.com/vardius/go-api-boilerplate/wiki)
 * [Package level docs](https://godoc.org/github.com/vardius/go-api-boilerplate#pkg-subdirectories)
