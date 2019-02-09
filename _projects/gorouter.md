@@ -5,6 +5,8 @@ permalink: /gorouter/
 description: Go Server/API micro framwework, HTTP request router, multiplexer, mux
 ---
 
+Vardius - gorouter
+================
 [![Build Status](https://travis-ci.org/vardius/gorouter.svg?branch=master)](https://travis-ci.org/vardius/gorouter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vardius/gorouter)](https://goreportcard.com/report/github.com/vardius/gorouter)
 [![codecov](https://codecov.io/gh/vardius/gorouter/branch/master/graph/badge.svg)](https://codecov.io/gh/vardius/gorouter)
@@ -64,9 +66,12 @@ func main() {
 }
 ```
 
-License
--------
-
-This package is released under the MIT license. See the complete license in the package:
-
-[LICENSE](LICENSE.md)
+## Advanced examples
+- [Routing](https://github.com/vardius/gorouter/wiki/Routing)
+- [Middleware](https://github.com/vardius/gorouter/wiki/Middleware)
+- [Mounting Sub Router](https://github.com/vardius/gorouter/wiki/Mounting-Sub-Router)
+- [Serving Files](https://github.com/vardius/gorouter/wiki/Serving-Files)
+- [Authentication](https://github.com/vardius/gorouter/wiki/Authentication)
+- [Handling Errors](https://github.com/vardius/gorouter/wiki/Handling-Errors)
+- [HTTP2](https://github.com/vardius/gorouter/wiki/HTTP2)
+- [Multidomain](https://github.com/vardius/gorouter/wiki/Multidomain)
