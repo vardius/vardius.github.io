@@ -5,6 +5,8 @@ title: worker-pool
 description: Go simple async worker pool
 ---
 
+Vardius - worker-pool
+================
 [![Build Status](https://travis-ci.org/vardius/worker-pool.svg?branch=master)](https://travis-ci.org/vardius/worker-pool)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vardius/worker-pool)](https://goreportcard.com/report/github.com/vardius/worker-pool)
 [![codecov](https://codecov.io/gh/vardius/worker-pool/branch/master/graph/badge.svg)](https://codecov.io/gh/vardius/worker-pool)
@@ -35,9 +37,17 @@ HOW TO USE
 **RAM: 16 GB 2133 MHz LPDDR3**
 
 ```bash
-➜  worker-pool git:(master) ✗ go test -bench=. -cpu=4
-BenchmarkWorker-4        1000000              1853 ns/op
+➜  worker-pool git:(master) ✗ go test -bench=. -cpu=4 -benchmem
+goos: darwin
+goarch: amd64
+BenchmarkWorker1-4                	 3000000	       453 ns/op	      56 B/op	       3 allocs/op
+BenchmarkWorker1Parallel-4        	 3000000	       506 ns/op	      48 B/op	       2 allocs/op
+BenchmarkWorker100-4              	 3000000	       485 ns/op	      56 B/op	       3 allocs/op
+BenchmarkWorker100Parallel-4      	 3000000	       444 ns/op	      48 B/op	       2 allocs/op
+BenchmarkWorkerNumCPU-4           	 3000000	       467 ns/op	      56 B/op	       3 allocs/op
+BenchmarkWorkerNumCPUParallel-4   	 3000000	       431 ns/op	      48 B/op	       2 allocs/op
 PASS
+ok  	worker-pool	11.570s
 ```
 
 ## Basic example
@@ -90,10 +100,3 @@ func main() {
 	// 3
 }
 ```
-
-License
--------
-
-This package is released under the MIT license. See the complete license in the package:
-
-[LICENSE](LICENSE.md)
