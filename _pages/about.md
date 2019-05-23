@@ -18,6 +18,8 @@ permalink: /about/
 
 ### TypeScript
  - [peer-data](http://rafallorenz.com/peer-data) - Library for files, media streaming/sharing using WebRTC
+ - [react-peer-data](http://rafallorenz.com/react-peer-data) - React wrapper for PeerData library for files, media streaming/sharing using WebRTC.
+ - [react-user-media](http://rafallorenz.com/react-user-media) - React wrapper for navigator.getUserMedia
  - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=typescript)
 
 ### Javascript
