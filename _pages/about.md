@@ -24,9 +24,9 @@ permalink: /about/
 
 ### Javascript
  - [peer-cdn](http://rafallorenz.com/peer-cdn) - Lightweight library providing peer to peer CDN functionality
- - [peer-data](http://rafallorenz.com/peer-data) - Library for files, media streaming/sharing using WebRTC
  - [web-component](http://rafallorenz.com/web-component) - Lightweight library providing interface for building web components
  - [webrtc-chat](http://rafallorenz.com/webrtc-chat) - Serverless chat application useing peer to peer WebRTC
+ - [react-webrtc-chat](http://rafallorenz.com/react-webrtc-chat) - React serverless chat application useing peer to peer WebRTC
  - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=javascript)
 
 ### PHP
