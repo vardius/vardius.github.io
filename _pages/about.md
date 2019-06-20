@@ -13,10 +13,10 @@ permalink: /about/
  - [message-bus](http://rafallorenz.com/message-bus) - Go simple async message bus
  - [gollback](http://rafallorenz.com/gollback) - Go asynchronous function simple utilities, for managing execution of closure, callbacks
  - [golog](http://rafallorenz.com/golog) - Go logger
- - [blockchain](https://github.com/vardius/blockchain) - Go gRPC blockchain
- - [gocontainer](https://github.com/vardius/gocontainer) - Dependency Injection Container
- - [shutdown](https://github.com/vardius/shutdown) - Simple shutdown signals handler with callback
- - [pubsub](https://github.com/vardius/pubsub) - gRPC message-oriented middleware on top of [message-bus](https://github.com/vardius/message-bus), event ingestion and delivery system.
+ - [blockchain](http://rafallorenz.com/blockchain) - Go gRPC blockchain
+ - [gocontainer](http://rafallorenz.com/gocontainer) - Dependency Injection Container
+ - [shutdown](http://rafallorenz.com/shutdown) - Simple shutdown signals handler with callback
+ - [pubsub](http://rafallorenz.com/pubsub) - gRPC message-oriented middleware on top of [message-bus](http://rafallorenz.com/message-bus), event ingestion and delivery system.
  - [...and more](https://github.com/vardius?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=go)
 
 ### TypeScript
