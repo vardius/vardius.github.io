@@ -83,14 +83,14 @@ But wait !? We want to generate buffer from chunks! How could we return them to 
 To not make things overly complicated lets say we reuse bytes of our file from before instead of generating them. Pretending we do some work and generate each byte then write it to response. Lets simply iterate over the bytes of our file and assume each byte is a chunk we generated. We will wait for about 200 microsecond to see some work being done (file we are using in this example is small).
 
 ```go
-	for _, chunk := range body {
-        if _, err := rw.Write(chunk); err != nil {
-            http.Error(w, "could not write chunk", http.StatusInternalServerError)
-            return
-        }
-
-		time.Sleep(200 * time.Microsecond)
+for _, chunk := range body {
+	if _, err := rw.Write(chunk); err != nil {
+	    http.Error(w, "could not write chunk", http.StatusInternalServerError)
+	    return
 	}
+
+	time.Sleep(200 * time.Microsecond)
+}
 ```
 
 This should work just fine, our file will start download and we can see how its size grows in the browser.
