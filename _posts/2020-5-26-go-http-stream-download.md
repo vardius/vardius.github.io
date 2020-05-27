@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTTP download stream response
+title: HTTP how to stream download response
 comments: true
 categories: Go
 ---
