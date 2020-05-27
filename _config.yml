@@ -6,7 +6,7 @@
 name: Rafał Lorenz
 
 # Short bio or description (displayed in the header)
-description: Software Architect
+description: Software Engineer
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://avatars0.githubusercontent.com/u/6569206?s=460&v=4
@@ -56,7 +56,7 @@ baseurl: ""
 # !! You don't need to change any of the configuration flags below !!
 #
 
-include: ['_pages', '_projects']
+include: ['_pages']
 
 permalink: /:categories/:title/
 
