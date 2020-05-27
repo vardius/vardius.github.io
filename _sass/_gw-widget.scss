@@ -26,7 +26,6 @@
 }
 .gw-watchers,
 .gw-forks {
-  background-position: 5px -52px;
   display: inline-block;
   height: 21px;
   padding: 0 5px 0 23px;
@@ -35,6 +34,9 @@
 }
 .gw-watchers {
   background-position: 5px -2px;
+}
+.gw-forks {
+  background-position: 5px -52px;
 }
 .gw-lang {
   font-size: 0.8em;
