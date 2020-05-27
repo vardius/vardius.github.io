@@ -214,3 +214,5 @@ As before for simplicity we use our body bytes here assuming we would have some 
 ## Conclusion
 
 There is no magic here, coming from another environment like PHP or Python I hear many question how to stream response. The answer simply is **write to response writer**~ I hope my post will help many those looking for answer while its right in front of them. Do not look for complicated logic.
+
+Full working code snippet available on [gist](https://gist.github.com/vardius/ebdbd84d23d6e794edf322f7fd9e02fa).
