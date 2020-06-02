@@ -5,9 +5,7 @@ comments: true
 categories: Go
 ---
 
-# What is error ?
-
-**Errors are values**. This is very crucial thing to understand, once one moves one from a mental object of *try/catch*. Handling errors in go becomes clear and simple.
+What is error ? **Errors are values**. This is very crucial thing to understand, once one moves one from a mental object of *try/catch*. Handling errors in go becomes clear and simple.
 
 So what does it really mean ?
 
