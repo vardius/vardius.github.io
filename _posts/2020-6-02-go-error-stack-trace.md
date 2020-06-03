@@ -5,7 +5,7 @@ comments: true
 categories: Go
 ---
 
-What is error ? **Errors are values**. This is very crucial thing to understand, once one moves one from a mental object of *try/catch*. Handling errors in go becomes clear and simple.
+Before we start lets rewind and answer a simple question. What is error ? **Errors are values**. This is very crucial thing to understand, if you come to Go from another enviroment you have to move one from a mental object of *try/catch*. Once you do that handling errors becomes clear and simple.
 
 So what does it really mean ?
 
@@ -19,11 +19,11 @@ if err != nil {
 }
 ```
 
-But locking only onto that simple check, means we haven't moved on from *try/catch* mental object! Instead trying to use this simple check as a drop in replacement for *try/catch* and its not!
+This also means we can add any information to error, for example stack trace.
 
 # Error as value
 
-[error](https://golang.org/pkg/builtin/#error) type is simply an interface, which means we could add any extra information to error itself, by creating our custom error type that implements that interface. Lets define our error as follow:
+[error](https://golang.org/pkg/builtin/#error) type is simply an interface, which means by creating our custom error type that implements that interface we could add any extra information. Lets define our error as follow:
 
 ```go
 type AppError struct {
@@ -41,7 +41,7 @@ func (e *AppError) Unwrap() error {
 }
 ```
 
-Our error will contain wrapped error plus a stack trace where it happened. Our error type will implement two important methods: [Error](https://golang.org/pkg/builtin/#error) and [Unwrap](https://golang.org/pkg/errors/#Unwrap). Since Go 1.13 introduces [new features](https://blog.golang.org/go1.13-errors) to the errors and fmt standard library packages to simplify working with errors that contain other errors. It makes it even easier to handle them.
+Our error will contain wrapped error, plus a stack trace where it happened. *AppError* type will implement two important methods: [Error](https://golang.org/pkg/builtin/#error) and [Unwrap](https://golang.org/pkg/errors/#Unwrap). Since Go 1.13 introduces [new features](https://blog.golang.org/go1.13-errors) to the errors and fmt standard library packages to simplify working with errors that contain other errors. It makes it even easier to handle them.
 
 ## Unwrap
 *Unwrap* method that returns its contained error:
