@@ -5,7 +5,17 @@ comments: true
 categories: Go
 ---
 
-Before we start lets rewind and answer a simple question. What is error ? **Errors are values**. This is very crucial thing to understand, if you come to Go from another enviroment you have to move one from a mental object of *try/catch*. Once you do that handling errors becomes clear and simple.
+Often when debugging Go code, errors stack trace is often built with following pattern:
+
+```go
+if err != nil {
+    return fmt.Errorf("Failed to do something: %w", err)
+}
+```
+
+One error is wrapped with another, message is concatenated, with some delimiter in this case `:`. We end up with error information hard to pin to a place where it actualy happend, which results in long trail and many steps of going file by file, error to error until we actually find it. So how could we improve our error experiance ?Before we start lets rewind a little bit and answer a simple question. What is error ?
+
+**Errors are values**. This is very crucial thing to understand, if you come to Go from another enviroment you have to move one from a mental object of *try/catch*. Once you do that handling errors becomes clear and simple.
 
 So what does it really mean ?
 
