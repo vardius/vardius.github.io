@@ -38,8 +38,8 @@ Our `HostSwitch` simply checks if a [http.Handler](https://golang.org/pkg/net/ht
 # Usage
 
 Let's say our switch will handle two hosts:
-- `example.local:3000`
-- `example.local:3001`
+- `example-one.local`
+- `example-two.local`
 
 And return forbidden response otherwise. We will use [ServeMux](https://golang.org/pkg/net/http/#ServeMux) as a router for both hosts.
 
@@ -56,11 +56,10 @@ func main() {
 	})
 
     hs := make(HostSwitch)
-    hs["example.local:3000"] = mux
-    hs["example.local:3001"] = muxTwo
+    hs["example-one.local:8080"] = mux
+    hs["example-two.local:8080"] = muxTwo
 
-    go log.Fatal(http.ListenAndServe(":3000", hs))
-    go log.Fatal(http.ListenAndServe(":3001", hs))
+    log.Fatal(http.ListenAndServe(":8080", hs))
 }
 ```
 
@@ -75,14 +74,13 @@ func main() {
 	})
 
     hs := make(HostSwitch)
-    hs["example.local:3000"] = mux
-    hs["example.local:3001"] = mux
+    hs["example-one.local:8080"] = mux
+    hs["example-two.local:8080"] = mux
 
-    go log.Fatal(http.ListenAndServe(":3000", hs))
-    go log.Fatal(http.ListenAndServe(":3001", hs))
+    go log.Fatal(http.ListenAndServe(":8080", hs))
 }
 ```
 
 # Conclusion
 
-Today we have created a simple `HostSwitch` which allows us to handle requests only if they come from valid hosts or perform different logic per host. This example demonstrates how to handle multidomains with Go. Don't forget to use [mutexes](https://golang.org/pkg/sync/#Mutex) to make our `HostSwitch` concurrency safe in real life implementation. Example on [The Go Playground](https://play.golang.org/p/VzzbzO2GZnG)
+Today we have created a simple `HostSwitch` which allows us to handle requests only if they come from valid hosts or perform different logic per host. This example demonstrates how to handle multidomains with Go. Don't forget to use [mutexes](https://golang.org/pkg/sync/#Mutex) to make our `HostSwitch` concurrency safe in real life implementation. Example on [The Go Playground](https://play.golang.org/p/bMbKPGE7LhT)
