@@ -1,6 +1,6 @@
 ---
 layout: post
-title: - Handling multidomain requests with simple host switch
+title: Handling multidomain requests with simple host switch
 comments: true
 categories: Go
 ---
