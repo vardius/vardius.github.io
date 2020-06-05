@@ -81,6 +81,8 @@ func main() {
 }
 ```
 
+Even though we perform only read operation, it is always better to use mutexes while working with maps. Don't forget to use [mutexes](https://golang.org/pkg/sync/#Mutex) to make our `HostSwitch` concurrency safe. 
+
 # Conclusion
 
-Today we have created a simple `HostSwitch` which allows us to handle requests only if they come from valid hosts or perform different logic per host. This example demonstrates how to handle multidomains with Go. Don't forget to use [mutexes](https://golang.org/pkg/sync/#Mutex) to make our `HostSwitch` concurrency safe in real life implementation. Example on [The Go Playground](https://play.golang.org/p/bMbKPGE7LhT)
+Today we have created a simple `HostSwitch` which allows us to handle requests only if they come from valid hosts or perform different logic per host. This example demonstrates how to handle multidomains with Go. Example on [The Go Playground](https://play.golang.org/p/bMbKPGE7LhT)
