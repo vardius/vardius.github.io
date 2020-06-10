@@ -19,8 +19,8 @@ That is all we need. Our middleware will wrap *protected* handlers verifying use
 
 ```go
 const (
-	requiredUser     = "gordon"
-	requiredPassword = "secret!"
+	requiredUser     = []byte("gordon")
+	requiredPassword = []byte("secret!")
 )
 
 func BasicAuth(next http.Handler) http.Handler {
@@ -28,7 +28,7 @@ func BasicAuth(next http.Handler) http.Handler {
 		// Get the Basic Authentication credentials
 		user, password, hasAuth := r.BasicAuth()
 
-		if !hasAuth || subtle.ConstantTimeCompare([]byte(user), []byte(requiredUser)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(requiredPassword)) != 1 {
+		if !hasAuth || subtle.ConstantTimeCompare([]byte(user), requiredUser) != 1 || subtle.ConstantTimeCompare([]byte(pass), requiredPassword) != 1 {
 			w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
