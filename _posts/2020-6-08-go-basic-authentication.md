@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Basic authentication with Go
+title: Basic HTTP authentication with Go
 comments: true
 categories: Go
 ---
@@ -24,23 +24,24 @@ const (
 )
 
 func BasicAuth(next http.Handler) http.Handler {
-    fn := func(w http.ResponseWriter, r *http.Request) {
-        // Get the Basic Authentication credentials
-        user, password, hasAuth := r.BasicAuth()
-        
-        if hasAuth && user == requiredUser && password == requiredPassword {
-            next.ServeHTTP(w, r)
-        } else {
-            w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
-            http.Error(w,http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-        }
-    }
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		// Get the Basic Authentication credentials
+		user, password, hasAuth := r.BasicAuth()
 
-    return http.HandlerFunc(fn)
+		if !hasAuth || subtle.ConstantTimeCompare([]byte(user), []byte(requiredUser)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(requiredPassword)) != 1 {
+			w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+
+	return http.HandlerFunc(fn)
 }
 ```
 
-In this example our middleware uses const values for username and password pair. Real life applications most likely would verify this information against values stored in database.
+In this example our middleware uses const values for username and password pair. Real life applications most likely would verify this information against values stored in database. Please note that [subtle.ConstantTimeCompare](https://golang.org/pkg/crypto/subtle/#ConstantTimeCompare) still depends on the length, so it is probably possible for attackers to work out the length of the username and password if you do it like this. To get around that you could hash them or add a fixed delay.
 
 Lets create two routes with different handlers. One id going to be publicly accessible and the other one is going to be protected with basic authentication.
 
