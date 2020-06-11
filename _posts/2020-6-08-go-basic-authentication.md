@@ -18,7 +18,7 @@ We can write simple middleware leveraging [BasicAuth](https://golang.org/pkg/net
 That is all we need. Our middleware will wrap *protected* handlers verifying username and password. Based on this information we can decide to grand or restrict access.
 
 ```go
-const (
+var (
 	requiredUser     = []byte("gordon")
 	requiredPassword = []byte("secret!")
 )
@@ -28,7 +28,7 @@ func BasicAuth(next http.Handler) http.Handler {
 		// Get the Basic Authentication credentials
 		user, password, hasAuth := r.BasicAuth()
 
-		if !hasAuth || subtle.ConstantTimeiCompare(requiredUser, []byte(user)) != 1 || subtle.ConstantTimeCompare(requiredPassword, []byte(pass)) != 1 {
+		if !hasAuth || subtle.ConstantTimeCompare(requiredUser, []byte(user)) != 1 || subtle.ConstantTimeCompare(requiredPassword, []byte(password)) != 1 {
 			w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
