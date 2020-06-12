@@ -163,7 +163,9 @@ This will open browser with nice graph.
 
 [<img src="{{ site.baseurl }}/images/pprof001.svg" alt="heap"/>]({{ site.baseurl }}/images/pprof001.svg)
 
-> Each box in the graph corresponds to a single function, and the boxes are sized according to the number of samples in which the function was running. You can read more about profiling Go programs on [the go blog](https://blog.golang.org/pprof).
+> Each box in the graph corresponds to a single function, and the boxes are sized according to the number of samples in which the function was running.
+
+You can read more about profiling Go programs on [the go blog](https://blog.golang.org/pprof).
 
 # Conclusion
 
