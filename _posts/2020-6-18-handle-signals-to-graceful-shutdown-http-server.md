@@ -1,0 +1,140 @@
+---
+layout: post
+title: How to handle signals with Go to graceful shutdown http server
+comments: true
+categories: Go
+---
+
+In this article we are going to learn how to handle os incoming [signals](https://golang.org/pkg/os/signal) for performing graceful shutdown of http server. To do so we are going to take advantage of [os/signal](https://golang.org/pkg/os/signal) package.
+
+> Signals are primarily used on Unix-like systems.
+
+# Types of signals
+
+We are going to focus on asynchronous signals. They are not triggered by program errors, but are instead sent from the kernel or from some other program.
+
+Of the asynchronous signals:
+
+- the `SIGHUP` signal is sent when a program loses its controlling terminal
+- the `SIGINT` signal is sent when the user at the controlling terminal presses the interrupt character, which by default is **^C (Control-C)**
+- The `SIGQUIT` signal is sent when the user at the controlling terminal presses the quit character, which by default is **^\ (Control-Backslash)**
+
+In general you can cause a program to simply exit by pressing ^C, and you can cause it to exit with a stack dump by pressing ^\.
+
+# Default behavior of signals in Go programs
+
+> By default, a synchronous signal is converted into a run-time panic. A `SIGHUP`, `SIGINT`, or `SIGTERM` signal causes the program to exit.
+If the Go program is started with either SIGHUP or SIGINT ignored (signal handler set to SIG_IGN), they will remain ignored.
+If the Go program is started with a non-empty signal mask, that will generally be honored. However, some signals are explicitly unblocked: the synchronous signals.
+
+You can read more about it on the [package documentation](https://golang.org/pkg/os/signal/#hdr-Default_behavior_of_signals_in_Go_programs)
+
+# Handling signals
+
+The idea is to catch incoming signal and perform graceful stop of our http application. We can create signal channel using, and use it to notify on incoming signal. `signal.Notify` disables the default behavior for a given set of asynchronous signals and instead delivers them over one or more registered channels.
+
+```go
+  signalChan := make(chan os.Signal, 1)
+
+	signal.Notify(
+		signalChan,
+		syscall.SIGHUP,  // kill -SIGHUP XXXX
+		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+		syscall.SIGQUIT, // kill -SIGQUIT XXXX
+	)
+
+	<-signalChan
+	log.Print("os.Interrupt - shutting down...\n")
+
+	// terminate after second signal before callback is done
+	go func() {
+		<-signalChan
+		log.Fatal("os.Kill - terminating...\n")
+	}()
+
+	// PERFORM GRACEFUL SHUTDOWN HERE
+
+	os.Exit(0)
+```
+
+When signal is received we will call a callback followed after by `os.Exit(0)`, if second signal is received will terminate process by a call to `os.Exit(1)`.
+
+# Graceful shutdown
+
+To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we can use [Shutdown](https://golang.org/pkg/net/http/#Server.Shutdown) method.
+
+> Shutdown gracefully shuts down the server without interrupting any active connections. Shutdown works by first closing all open listeners, then closing all idle connections, and then waiting indefinitely for connections to return to idle and then shut down. If the provided context expires before the shutdown is complete, Shutdown returns the context's error, otherwise it returns any error returned from closing the Server's underlying Listener(s).
+
+```go
+  ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+  defer cancel()
+
+  if err := httpServer.Shutdown(ctx); err != nil {
+    log.Fatalf("shutdown error: %v\n", err)
+  } else {
+    log.Printf("gracefully stopped\n")
+  }
+```
+
+# Gluing up all pieces together
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+)
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		fmt.Fprintf(w, "Hello!")
+	})
+
+	httpServer := &http.Server{
+		Addr:    ":8080",
+		Handler: mux,
+	}
+
+	signalChan := make(chan os.Signal, 1)
+
+	signal.Notify(
+		signalChan,
+		syscall.SIGHUP,  // kill -SIGHUP XXXX
+		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+		syscall.SIGQUIT, // kill -SIGQUIT XXXX
+	)
+
+	<-signalChan
+	log.Print("os.Interrupt - shutting down...\n")
+
+	go func() {
+		<-signalChan
+		log.Fatal("os.Kill - terminating...\n")
+	}()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := httpServer.Shutdown(ctx); err != nil {
+		log.Fatalf("shutdown error: %v\n", err)
+	} else {
+		log.Printf("gracefully stopped\n")
+	}
+
+	os.Exit(0)
+}
+```
+
+Run this example on [The Go Playground](https://play.golang.org/p/Z-0ODPr170Q)
+
+# Conclusion
+
+By using tools provided by go environment, we can easily handle graceful shutdown of our application. We could simply create a package to handle that for us, in fact I already have created one if you are interested. [shutdown](https://github.com/vardius/shutdown) - is a simple go signals handler for performing graceful shutdown by executing callback function.
