@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to handle signals with Go to graceful shutdown http server
+title: How to handle signals with Go to graceful shutdown HTTP server
 comments: true
 categories: Go
 ---
@@ -59,7 +59,9 @@ The idea is to catch incoming signal and perform graceful stop of our http appli
 
 When signal is received we will call a callback followed after by `os.Exit(0)`, if second signal is received will terminate process by a call to `os.Exit(1)`.
 
-# Graceful shutdown
+# Server
+
+## Graceful shutdown
 
 To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we can use [Shutdown](https://golang.org/pkg/net/http/#Server.Shutdown) method.
 
@@ -76,7 +78,42 @@ To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we
   }
 ```
 
+## Handling hijacked connections
+
+> [RegisterOnShutdown](https://golang.org/pkg/net/http/#Server.RegisterOnShutdown) registers a function to call on Shutdown. This can be used to gracefully shutdown connections that have undergone ALPN protocol upgrade or that have been hijacked. This function should start protocol-specific graceful shutdown, but should not wait for shutdown to complete.
+
+```go
+	ctx, cancel := context.WithCancel(context.Background())
+
+	httpServer.RegisterOnShutdown(cancel)
+```
+
+## Shutting down websocket connections
+
+We want to ask context passed down to the socket handlers/goroutines to stop. To do so we can set `BaseContext` property on [http.Server](https://golang.org/pkg/net/http/#Server).
+
+> BaseContext optionally specifies a function that returns the base context for incoming requests on this server. The provided Listener is the specific Listener that's about to start accepting requests. If BaseContext is nil, the default is context.Background(). If non-nil, it must return a non-nil context.
+
+```go
+	ctx, cancel := context.WithCancel(context.Background())
+
+	httpServer := &http.Server{
+		Addr:        ":8080",
+		Handler:     mux,
+		BaseContext: func(_ net.Listener) context.Context { return ctx },
+	}
+	httpServer.RegisterOnShutdown(cancel)
+```
+
+The ones that are idle will immediately stop and the ones who are busy will terminate as soon as they are done (using a select loop on ctx.Done()).
+
 # Gluing up all pieces together
+
+**Note*: that we are deferring `os.Exit()` and return because defers don't run on fatal, because we are calling it from the main goroutine.
+
+> Calling Goexit from the main goroutine terminates that goroutine without func main returning. Since func main has not returned, the program continues execution of other goroutines. If all other goroutines exit, the program crashes.
+
+You can read conversation about it [here](https://www.reddit.com/r/golang/comments/hbalgf/how_to_handle_signals_with_go_to_graceful/fv800rj?utm_source=share&utm_medium=web2x)
 
 ```go
 package main
@@ -85,6 +122,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -93,15 +131,28 @@ import (
 )
 
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "Hello!")
 	})
 
 	httpServer := &http.Server{
-		Addr:    ":8080",
-		Handler: mux,
+		Addr:        ":8080",
+		Handler:     mux,
+		BaseContext: func(_ net.Listener) context.Context { return ctx },
 	}
+	httpServer.RegisterOnShutdown(cancel)
+
+	// Run server
+	go func() {
+		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
+			log.Printf("HTTP server ListenAndServe: %v", err)
+			defer os.Exit(1)
+			return
+		}
+	}()
 
 	signalChan := make(chan os.Signal, 1)
 
@@ -117,23 +168,28 @@ func main() {
 
 	go func() {
 		<-signalChan
-		log.Fatal("os.Kill - terminating...\n")
+		log.Print("os.Kill - terminating...\n")
+		defer os.Exit(1)
+		return
 	}()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	gracefullCtx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelShutdown()
 
-	if err := httpServer.Shutdown(ctx); err != nil {
-		log.Fatalf("shutdown error: %v\n", err)
+	if err := httpServer.Shutdown(gracefullCtx); err != nil {
+		log.Printf("shutdown error: %v\n", err)
+		defer os.Exit(1)
+		return
 	} else {
 		log.Printf("gracefully stopped\n")
 	}
 
-	os.Exit(0)
+	defer os.Exit(0)
+	return
 }
 ```
 
-Run this example on [The Go Playground](https://play.golang.org/p/Z-0ODPr170Q)
+Run this example on [The Go Playground](https://play.golang.org/p/fgh621NXRAO)
 
 # Conclusion
 
