@@ -148,9 +148,8 @@ func main() {
 	// Run server
 	go func() {
 		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
-			log.Printf("HTTP server ListenAndServe: %v", err)
-			defer os.Exit(1)
-			return
+			// it is fine to use Fatal here because it is not main gorutine
+			log.Fatalf("HTTP server ListenAndServe: %v", err)
 		}
 	}()
 
@@ -168,9 +167,7 @@ func main() {
 
 	go func() {
 		<-signalChan
-		log.Print("os.Kill - terminating...\n")
-		defer os.Exit(1)
-		return
+		log.Fatal("os.Kill - terminating...\n")
 	}()
 
 	gracefullCtx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
@@ -189,7 +186,7 @@ func main() {
 }
 ```
 
-Run this example on [The Go Playground](https://play.golang.org/p/fgh621NXRAO)
+Run this example on [The Go Playground](https://play.golang.org/p/6w3yFxU1N24)
 
 # Conclusion
 
