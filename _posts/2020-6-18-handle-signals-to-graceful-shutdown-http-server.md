@@ -78,6 +78,8 @@ To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we
   }
 ```
 
+> Shutdown does not attempt to close nor wait for hijacked connections such as WebSockets. The caller of Shutdown should separately notify such long-lived connections of shutdown and wait for them to close, if desired. See RegisterOnShutdown for a way to register shutdown notification functions.
+
 ## Handling hijacked connections
 
 > [RegisterOnShutdown](https://golang.org/pkg/net/http/#Server.RegisterOnShutdown) registers a function to call on Shutdown. This can be used to gracefully shutdown connections that have undergone ALPN protocol upgrade or that have been hijacked. This function should start protocol-specific graceful shutdown, but should not wait for shutdown to complete.
