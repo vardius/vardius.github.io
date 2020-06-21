@@ -109,7 +109,7 @@ The ones that are idle will immediately stop and the ones who are busy will term
 
 # Gluing up all pieces together
 
-**Note*: that we are deferring `os.Exit()` and return because defers don't run on fatal, because we are calling it from the main goroutine.
+**Note**: that we are deferring `os.Exit()` followed by `return`. Defers don't run on `Fatal()`.
 
 > Calling Goexit from the main goroutine terminates that goroutine without func main returning. Since func main has not returned, the program continues execution of other goroutines. If all other goroutines exit, the program crashes.
 
