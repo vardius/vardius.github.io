@@ -78,7 +78,7 @@ To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we
   }
 ```
 
-> Shutdown does not attempt to close nor wait for hijacked connections such as WebSockets. The caller of Shutdown should separately notify such long-lived connections of shutdown and wait for them to close, if desired. See RegisterOnShutdown for a way to register shutdown notification functions.
+> Shutdown does not attempt to close nor wait for hijacked connections such as WebSockets. The caller of Shutdown should separately notify such long-lived connections of shutdown and wait for them to close, if desired. See [RegisterOnShutdown](https://golang.org/pkg/net/http/#Server.RegisterOnShutdown) for a way to register shutdown notification functions.
 
 ## Handling hijacked connections
 
@@ -89,8 +89,6 @@ To gracefully shutdown [http.Server](https://golang.org/pkg/net/http/#Server) we
 
 	httpServer.RegisterOnShutdown(cancel)
 ```
-
-## Shutting down websocket connections
 
 We want to ask context passed down to the socket handlers/goroutines to stop. To do so we can set `BaseContext` property on [http.Server](https://golang.org/pkg/net/http/#Server).
 
@@ -107,15 +105,27 @@ We want to ask context passed down to the socket handlers/goroutines to stop. To
 	httpServer.RegisterOnShutdown(cancel)
 ```
 
-The ones that are idle will immediately stop and the ones who are busy will terminate as soon as they are done (using a select loop on ctx.Done()).
+Keep in mind that doing so will make [Shutdown](https://golang.org/pkg/net/http/#Server.Shutdown) cancel context via `RegisterOnShutdown` which will terminate all handlers using `BaseContext` immediately.
+
+Full correct solution would require you to separate base context for WeSocket connections and other HTTP handlers. Also seems like introducing simple timeout to cancel `BaseContext` will not be enough, connections idleness has to be checked as well. 
+
+If you do not care about notifying long-lived connections during shutdown and don't want to wait for them to close gracefully. Quick solution would be to manually cancel `BaseContext` instead of using `RegisterOnShutdown` which makes context get canceled as the first procedure during shutdown.
+
+```go
+	ctx, cancel := context.WithCancel(context.Background())
+
+	httpServer := &http.Server{
+		Addr:        ":8080",
+		Handler:     mux,
+		BaseContext: func(_ net.Listener) context.Context { return ctx },
+	}
+	
+	// GRACEFULLY SHUTDOWN
+
+	cancel()
+```
 
 # Gluing up all pieces together
-
-**Note**: that we are deferring `os.Exit()` followed by `return`. Defers don't run on `Fatal()`.
-
-> Calling Goexit from the main goroutine terminates that goroutine without func main returning. Since func main has not returned, the program continues execution of other goroutines. If all other goroutines exit, the program crashes.
-
-You can read conversation about it [here](https://www.reddit.com/r/golang/comments/hbalgf/how_to_handle_signals_with_go_to_graceful/fv800rj?utm_source=share&utm_medium=web2x)
 
 ```go
 package main
@@ -145,7 +155,8 @@ func main() {
 		Handler:     mux,
 		BaseContext: func(_ net.Listener) context.Context { return ctx },
 	}
-	httpServer.RegisterOnShutdown(cancel)
+	// if your BaseContext is more complex you might want to use this instead of doing it manually
+	// httpServer.RegisterOnShutdown(cancel)
 
 	// Run server
 	go func() {
@@ -183,10 +194,21 @@ func main() {
 		log.Printf("gracefully stopped\n")
 	}
 
+	// manually cancel context if not using httpServer.RegisterOnShutdown(cancel)
+	cancel()
+
 	defer os.Exit(0)
 	return
 }
 ```
+
+When Shutdown is called, `Serve`, `ListenAndServe`, and `ListenAndServeTLS` immediately return `ErrServerClosed`. Make sure the program doesn't exit and waits instead for Shutdown to return.
+
+**Note**: that we are deferring `os.Exit()` followed by `return`. Defers don't run on `Fatal()`.
+
+> Calling Goexit from the main goroutine terminates that goroutine without func main returning. Since func main has not returned, the program continues execution of other goroutines. If all other goroutines exit, the program crashes.
+
+You can read conversation about it [here](https://www.reddit.com/r/golang/comments/hbalgf/how_to_handle_signals_with_go_to_graceful/fv800rj?utm_source=share&utm_medium=web2x)
 
 Run this example on [The Go Playground](https://play.golang.org/p/6w3yFxU1N24)
 
