@@ -311,4 +311,4 @@ Service **B** custom transport sets headers for content type only, because we ar
 
 We have learned today how to take advantage of Go's [http.Client](https://golang.org/pkg/net/http/#Client) and leverage [http.RoundTripper](https://golang.org/pkg/net/http/#RoundTripper) to apply custom logic to our customized HTTP client.
 
-With the help of code snippets presented in this post, I hope you have grasped the idea of how to create application HTTP client and, for example apply custom logic. If the API provider would return header with a retry delay time would you be able to add rate limit logic? Try to do it yourself, if you need help leave a comment and lets play in Go's playground.
+With the help of code snippets presented in this post, I hope you have grasped the idea of how to customize HTTP client and apply custom, service specific logic. If the API provider would return header with a retry delay time would you be able to add rate limit logic? Try to do it yourself, if you need help leave a comment and lets play in Go's playground. 
