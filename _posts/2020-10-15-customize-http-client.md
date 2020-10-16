@@ -39,23 +39,23 @@ We want our client to conform to the following interface:
 
 ```go
 type HTTPClient interface {
-	Get(ctx context.Context, path string, response interface{}) error
-	Post(ctx context.Context, path string, payload interface{}, response interface{}) error
-	Put(ctx context.Context, path string, payload interface{}, response interface{}) error
-	Delete(ctx context.Context, path string, payload interface{}, response interface{}) error
+	Get(ctx context.Context, path string, v interface{}) error
+	Post(ctx context.Context, path string, payload interface{}, v interface{}) error
+	Put(ctx context.Context, path string, payload interface{}, v interface{}) error
+	Delete(ctx context.Context, path string, payload interface{}, v interface{}) error
 }
 ```
 
-As you can probably notice we want to be able to pass `path` with optional `payload` and `response` objects into which response body should be parsed. This will allow us to implement quickly API calls that are specific for our service, without unnecessary duplications. To keep this post short I am going to implement one method:
+As you can probably notice we want to be able to pass `path` with optional `payload` and `v` objects into which response body should be parsed. This will allow us to implement quickly API calls that are specific for our service, without unnecessary duplications. To keep this post short I am going to implement one method:
 
 ```go
-func (c *Client) Get(ctx context.Context, path string, response interface{}) error {
+func (c *Client) Get(ctx context.Context, path string, v interface{}) error {
 	req, err := c.newRequest(ctx, http.MethodGet, path, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create GET request: %w", err)
 	}
 
-	if _, err := c.doRequest(req, response); err != nil {
+	if _, err := c.doRequest(req, v); err != nil {
 		return err
 	}
 
@@ -137,23 +137,28 @@ At this stage we also set request's context to given one, context will be respon
 To keep our logic simple and readable in this stage lets handle response parsing and defer request processing deeper. We could also at this stage add here retry on error logic, before we parse response body.
 
 ```go
-func (c *Client) doRequest(r *http.Request, response interface{}) error {
-	if resp, err := c.do(r); err != nil {
-			return err
-	} else {
-		defer resp.Body.Close()
-		if response != nil {
-			bodyBytes, err := ioutil.ReadAll(resp.Body)
-			if err != nil {
-				return fmt.Errorf("could not read response body: %w [%s:%s] %s", err, r.Method, r.URL.String(), string(bodyBytes))
-			}
+func (c *Client) doRequest(r *http.Request, v interface{}) error {
+	resp, err := c.do(r)
+	if err != nil {
+		return err
+	}
 
-			if err := json.Unmarshal(bodyBytes, response); err != nil {
-				return fmt.Errorf("could not parse response body: %w [%s:%s] %s", err, r.Method, r.URL.String(), string(bodyBytes))
-			}
-		}
+	if resp == nil {
 		return nil
 	}
+	defer resp.Body.Close()
+
+	if v == nil {
+		return nil
+	}
+
+	var buf bytes.Buffer
+	dec := json.NewDecoder(io.TeeReader(resp.Body, &buf))
+	if err := dec.Decode(v); err != nil {
+		return fmt.Errorf("could not parse response body: %w [%s:%s] %s", err, r.Method, r.URL.String(), buf.String())
+	}
+
+	return nil
 }
 ```
 
@@ -311,4 +316,4 @@ Service **B** custom transport sets headers for content type only, because we ar
 
 We have learned today how to take advantage of Go's [http.Client](https://golang.org/pkg/net/http/#Client) and leverage [http.RoundTripper](https://golang.org/pkg/net/http/#RoundTripper) to apply custom logic to our customized HTTP client.
 
-With the help of code snippets presented in this post, I hope you have grasped the idea of how to customize HTTP client and apply custom, service specific logic. If the API provider would return header with a retry delay time would you be able to add rate limit logic? Try to do it yourself, if you need help leave a comment and lets play in Go's playground. 
+With the help of code snippets presented in this post, I hope you have grasped the idea of how to customize HTTP client and apply custom, service specific logic. If the API provider would return header with a retry delay time would you be able to add rate limit logic? Try to do it yourself, if you need help leave a comment and lets play in Go's playground.
