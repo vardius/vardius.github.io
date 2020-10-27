@@ -246,8 +246,8 @@ type transport struct {
 	apiKey    string
 }
 
-func (t *transport) RoundTrip(r *http.Request) (*http.Response, error) {
-	r = r.Clone(r.Context())
+func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	r := req.Clone(r.Context())
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Accept", "application/json")
 	r.Header.Add("Accept-Charset", "UTF-8")
@@ -303,8 +303,8 @@ func New(t *Token) *Service {
 
 type transport struct {}
 
-func (t *transport) RoundTrip(r *http.Request) (*http.Response, error) {
-	r = r.Clone(r.Context())
+func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	r := req.Clone(r.Context())
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Accept", "application/json")
 
