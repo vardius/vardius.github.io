@@ -247,6 +247,7 @@ type transport struct {
 }
 
 func (t *transport) RoundTrip(r *http.Request) (*http.Response, error) {
+	r = r.Clone(r.Context())
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Accept", "application/json")
 	r.Header.Add("Accept-Charset", "UTF-8")
@@ -303,6 +304,7 @@ func New(t *Token) *Service {
 type transport struct {}
 
 func (t *transport) RoundTrip(r *http.Request) (*http.Response, error) {
+	r = r.Clone(r.Context())
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Accept", "application/json")
 
