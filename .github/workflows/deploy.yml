@@ -1,0 +1,64 @@
+# Snapshots the public GitHub data this site renders and deploys the static
+# files to GitHub Pages. Runs on every push, once a day (so star counts and new
+# repositories show up without a commit), and on demand.
+#
+# One-time setup: Settings → Pages → Source → "GitHub Actions".
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Snapshot GitHub data
+        env:
+          # SHOWCASE_TOKEN is an optional repository secret: a fine-grained
+          # personal access token with "Metadata: Read-only" and "Pages: Read-only" on all
+          # repositories. With it, private repositories that have GitHub Pages
+          # and the `showcase` topic are listed as live sites (name, description
+          # and language only). Without it, only public repositories appear.
+          GH_TOKEN: ${{ secrets.SHOWCASE_TOKEN || github.token }}
+          OWNER: ${{ github.repository_owner }}
+          SHOWCASE_TOPIC: showcase
+        run: ./scripts/fetch-data.sh
+
+      - name: Stage site
+        run: |
+          rsync -a \
+            --exclude '.git' --exclude '.github' --exclude '.claude' \
+            --exclude 'scripts' --exclude 'README.md' --exclude '.gitignore' \
+            --exclude '_site' \
+            ./ _site/
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

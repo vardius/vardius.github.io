@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Not found · vardius</title>
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0b0d12">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.dataset.theme = t;
+      } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+    })();
+  </script>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/"><img src="/images/gopher.png" alt="" width="30" height="32"><span>vardius</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/#sites" class="txt">Sites</a>
+        <a href="/#repos" class="txt">Repos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container oops">
+    <div>
+      <img src="/images/gopher.png" alt="A puzzled gopher" width="260" height="278">
+      <h1>This page moved on.</h1>
+      <p>There is nothing at <code id="path">this address</code>.</p>
+      <p id="hint">The old blog was retired; the code behind the articles still lives on GitHub.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="/">Back home</a>
+        <a class="btn" id="wayback" href="https://web.archive.org/web/2024/https://vardius.github.io/" target="_blank" rel="noopener">Archived copy</a>
+        <a class="btn" href="https://github.com/vardius" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Old article URLs are still linked from around the web; offer the Wayback Machine copy.
+    (function () {
+      var path = location.pathname;
+      document.getElementById('path').textContent = path;
+      document.getElementById('wayback').href = 'https://web.archive.org/web/2024/https://vardius.github.io' + path;
+    })();
+  </script>
+</body>
+</html>

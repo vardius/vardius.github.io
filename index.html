@@ -1,26 +1,166 @@
----
-layout: default
----
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vardius · open source</title>
+  <meta name="description" content="Open-source work by vardius: live GitHub Pages sites and every public repository, in one place.">
+  <link rel="canonical" href="https://vardius.github.io/">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0b0d12">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="vardius · open source">
+  <meta property="og:description" content="Live GitHub Pages sites and every public repository, in one place.">
+  <meta property="og:url" content="https://vardius.github.io/">
+  <meta property="og:image" content="https://vardius.github.io/images/gopher.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    // Resolve the theme before first paint to avoid a flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.dataset.theme = t;
+      } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+    })();
+  </script>
+  <script>
+    // Everything the page needs to know about you. The rest comes from the GitHub API.
+    window.SITE = {
+      owner: 'vardius',
+      showName: true,                   // set to false to show only the @handle
+      ignoreDomains: ['rafallorenz.com'],   // retired domains: never linked, sites on them are hidden
+    };
+  </script>
+</head>
+<body>
+  <a class="skip" href="#repos">Skip to repositories</a>
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="grain" aria-hidden="true"></div>
 
-<h1>Hi there 👋</h1>
+  <header class="nav" id="top">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="vardius, back to top">
+        <img src="images/gopher.png" alt="" width="30" height="32">
+        <span>vardius</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#sites" class="txt">Sites</a>
+        <a href="#repos" class="txt">Repos</a>
+        <a class="icon-btn" href="https://github.com/vardius" target="_blank" rel="noopener" aria-label="GitHub profile" title="GitHub">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://github.com/sponsors/vardius" target="_blank" rel="noopener" aria-label="Sponsor on GitHub" title="Sponsor">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m8 14.25.345.666a.75.75 0 0 1-.69 0l-.008-.004-.018-.01a7.152 7.152 0 0 1-.31-.17 22.055 22.055 0 0 1-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.066 22.066 0 0 1-3.744 2.584l-.018.01-.006.003h-.002ZM4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.58 20.58 0 0 0 8 13.393a20.58 20.58 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z"/></svg>
+        </a>
+        <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme">
+          <svg class="sun" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"/></svg>
+          <svg class="moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-<p style="text-align: justify;">Welcome, I am a Senior Software Engineer at <a href="https://www.autopilothq.com">Autopilot</a>, a graduate of Computer Science at the <a href="http://weka.pwr.edu.pl/en/">Faculty of Electronics</a>, <a href="http://pwr.edu.pl/en/">Wrocław University of Science and Technology</a> where I did both my Bachelor and Masters degrees. Full stack software developer with lot of experience. Knowing the highest programming method and cutting edge technologies. I am constantly striving to learn new technologies and looking for ways to better myself in this rapidly changing industry. Beside working full time I am doing <a href="https://rafallorenz.com/open-source/">open source projects</a> and develop my own applications. I am dedicated to my craft and I am proud of my code. I am trying to write beautiful, efficient code to a high standard, in a timely and scalable way that improves the code-base of products in meaningful ways.</p>
-
-<p style="text-align: justify;">Please look around and leave a comment. Feel free to reach out to me. I am always happy to help!</p>
-
-<h1>Articles</h1>
-
-<div class="posts">
-    {% for post in site.posts %}
-      <article class="post">
-  
-        <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
-  
-        <div class="entry">
-          {{ post.excerpt }}
+  <main class="container">
+    <section class="hero" aria-labelledby="headline">
+      <div class="hero-copy">
+        <p class="eyebrow" id="eyebrow">@vardius</p>
+        <h1 id="headline">Building things <em>in the open.</em></h1>
+        <p class="lede" id="lede">Software engineer building open-source tools in Go and JavaScript: libraries, boilerplates and the occasional experiment.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://github.com/vardius" target="_blank" rel="noopener">GitHub profile</a>
+          <a class="btn" href="#repos">Browse repositories</a>
         </div>
-  
-        <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-      </article>
-    {% endfor %}
-  </div>
+        <ul class="stats" aria-label="Statistics">
+          <li class="stat"><b data-stat="repos">–</b><span>Public repos</span></li>
+          <li class="stat"><b data-stat="stars">–</b><span>Stars</span></li>
+          <li class="stat"><b data-stat="forks">–</b><span>Forks</span></li>
+          <li class="stat"><b data-stat="sites">–</b><span>Live sites</span></li>
+        </ul>
+      </div>
+      <div class="hero-art">
+        <img src="images/gopher.png" alt="A gopher with a moustache and a wristwatch: the vardius mascot" width="380" height="407" fetchpriority="high" decoding="async">
+      </div>
+    </section>
+
+    <section class="section" id="sites" aria-labelledby="sites-title">
+      <div class="section-head">
+        <div>
+          <h2 id="sites-title">Live on GitHub Pages</h2>
+          <p>Docs, demos and small apps with a published site.</p>
+        </div>
+        <span class="count" id="sites-count"></span>
+      </div>
+      <div class="grid grid-sites" id="sites-grid" aria-busy="true">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+    </section>
+
+    <section class="section" id="repos" aria-labelledby="repos-title">
+      <div class="section-head">
+        <div>
+          <h2 id="repos-title">Repositories</h2>
+          <p>Every public repository, straight from the GitHub API.</p>
+        </div>
+        <span class="count" id="repos-count" aria-live="polite"></span>
+      </div>
+
+      <div class="langbar" id="langbar" aria-label="Languages, click to filter"></div>
+
+      <div class="toolbar">
+        <label class="search">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"/></svg>
+          <span class="sr-only">Search repositories</span>
+          <input id="search" type="search" placeholder="Search repositories…" autocomplete="off" spellcheck="false">
+          <kbd aria-hidden="true">/</kbd>
+        </label>
+        <div class="controls">
+          <label class="select">
+            <span class="sr-only">Sort by</span>
+            <select id="sort">
+              <option value="stars">Most stars</option>
+              <option value="updated">Recently updated</option>
+              <option value="forks">Most forks</option>
+              <option value="name">Name A–Z</option>
+            </select>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"/></svg>
+          </label>
+          <button class="switch" id="forks" type="button" role="switch" aria-checked="false"><i aria-hidden="true"></i>Forks</button>
+          <button class="switch" id="archived" type="button" role="switch" aria-checked="false" hidden><i aria-hidden="true"></i>Archived</button>
+        </div>
+      </div>
+
+      <div class="chips" id="chips" role="group" aria-label="Filter by language"></div>
+
+      <div class="grid" id="repos-grid" aria-busy="true">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+      <div class="empty" id="empty" hidden>
+        <p>Nothing matches those filters.</p>
+        <button class="btn btn-sm" id="reset" type="button">Clear filters</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p>No analytics, no ads, no cookies. <span id="data-note">Data from the GitHub API.</span></p>
+    <p class="footer-links">
+      <a href="https://github.com/vardius" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://github.com/sponsors/vardius" target="_blank" rel="noopener">Sponsor</a> ·
+      <a href="https://github.com/vardius/vardius.github.io" target="_blank" rel="noopener">Source</a>
+    </p>
+  </footer>
+
+  <noscript>
+    <div class="container notice" style="margin-bottom:2rem">
+      <p>This page lists repositories with JavaScript. Without it, everything is still on <a href="https://github.com/vardius?tab=repositories">github.com/vardius</a>.</p>
+    </div>
+  </noscript>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
