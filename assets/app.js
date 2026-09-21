@@ -309,7 +309,8 @@
   }
 
   function countUp(node, to) {
-    if (reduceMotion) { node.textContent = fmt(to); return; }
+    // No animation for reduced motion, or when the tab is hidden (rAF is paused there).
+    if (reduceMotion || document.hidden) { node.textContent = fmt(to); return; }
     const dur = 900, t0 = performance.now();
     const step = (now) => {
       const p = Math.min(1, (now - t0) / dur);
