@@ -12,8 +12,11 @@
   <meta property="og:title" content="vardius · open source">
   <meta property="og:description" content="Live GitHub Pages sites and every public repository, in one place.">
   <meta property="og:url" content="https://vardius.github.io/">
-  <meta property="og:image" content="https://vardius.github.io/images/gopher.png">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://vardius.github.io/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="vardius: building things in the open.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="assets/style.css">
@@ -44,7 +47,7 @@
   <header class="nav" id="top">
     <div class="container nav-inner">
       <a class="brand" href="#top" aria-label="vardius, back to top">
-        <img src="images/gopher.png" alt="" width="30" height="32">
+        <span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M8.6 9h4.5l2.9 8 2.9-8h4.5l-5.1 14h-4.6Z"/></svg></span>
         <span>vardius</span>
       </a>
       <nav class="nav-links" aria-label="Primary">
@@ -81,9 +84,15 @@
           <li class="stat"><b data-stat="sites">–</b><span>Live sites</span></li>
         </ul>
       </div>
-      <div class="hero-art">
-        <img src="images/gopher.png" alt="A gopher with a moustache and a wristwatch: the vardius mascot" width="380" height="407" fetchpriority="high" decoding="async">
-      </div>
+      <aside class="panel" aria-labelledby="top-title">
+        <div class="panel-head">
+          <h2 id="top-title">Most starred</h2>
+          <a href="#repos">All repositories</a>
+        </div>
+        <ol class="top-list" id="top-list" aria-busy="true">
+          <li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>
+        </ol>
+      </aside>
     </section>
 
     <section class="section" id="sites" aria-labelledby="sites-title">

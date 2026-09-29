@@ -289,7 +289,7 @@
   /* ---------- rendering ---------- */
 
   const el = {
-    eyebrow: $('#eyebrow'), lede: $('#lede'),
+    eyebrow: $('#eyebrow'), lede: $('#lede'), topList: $('#top-list'),
     sitesGrid: $('#sites-grid'), sitesCount: $('#sites-count'),
     reposGrid: $('#repos-grid'), reposCount: $('#repos-count'),
     langbar: $('#langbar'), chips: $('#chips'), search: $('#search'), sort: $('#sort'),
@@ -341,6 +341,28 @@
         ? `Snapshot of the GitHub API, refreshed ${timeAgo(data.generatedAt)}.`
         : 'Live from the GitHub API.';
     }
+  }
+
+  function topItem(r, i) {
+    return `<li class="reveal" style="--i:${i}">
+      <a class="top-item" href="${esc(r.html_url)}" target="_blank" rel="noopener">
+        <span class="mark" style="background:${fingerprint(r.name).css}" aria-hidden="true">${esc(monogram(r.name))}</span>
+        <span class="top-text">
+          <span class="top-name">${esc(r.name)}</span>
+          <span class="top-desc">${esc(r.description || 'No description yet.')}</span>
+        </span>
+        <span class="top-stars">${ICON.star} ${fmt(r.stargazers_count)}<span class="sr-only"> stars</span></span>
+      </a>
+    </li>`;
+  }
+
+  // The hero's shortlist: most-starred original work, independent of the repo filters.
+  function renderTop(repos) {
+    const top = repos.filter((r) => !r.private && !r.fork && !r.archived && r.stargazers_count > 0)
+      .sort(SORTS.stars).slice(0, 5);
+    el.topList.removeAttribute('aria-busy');
+    el.topList.innerHTML = top.length ? top.map(topItem).join('') : '<li class="top-note">No starred repositories yet.</li>';
+    reveal(el.topList);
   }
 
   function siteCard(r, i) {
@@ -399,6 +421,7 @@
 
   function renderSites(repos) {
     const sites = repos.filter(isSite).sort(SORTS.stars);
+    el.sitesGrid.removeAttribute('aria-busy');
     el.sitesCount.textContent = `${sites.length} live`;
     if (!sites.length) {
       el.sitesGrid.innerHTML = '<div class="notice"><p>No GitHub Pages sites yet.</p></div>';
@@ -441,6 +464,7 @@
 
     el.reposCount.textContent = list.length === base.length ? `${base.length} public` : `${list.length} of ${base.length}`;
     el.empty.hidden = list.length > 0;
+    el.reposGrid.removeAttribute('aria-busy');
     el.reposGrid.innerHTML = list.map((r, i) => repoCard(r, i, animate)).join('');
     if (animate) reveal(el.reposGrid);
   }
@@ -451,8 +475,10 @@
       ? 'The GitHub API rate limit for your network was reached. Try again in a bit, or browse straight on GitHub.'
       : 'Could not load repositories from GitHub right now.';
     const html = `<div class="notice"><p>${esc(msg)}</p><a class="btn btn-sm" href="https://github.com/${esc(OWNER)}?tab=repositories" target="_blank" rel="noopener">Open github.com/${esc(OWNER)} ${ICON.arrow}</a></div>`;
+    el.topList.innerHTML = '<li class="top-note">Could not load repositories right now.</li>';
     el.sitesGrid.innerHTML = html;
     el.reposGrid.innerHTML = html;
+    $$('[aria-busy]').forEach((n) => n.removeAttribute('aria-busy'));
     el.sitesCount.textContent = '';
     el.reposCount.textContent = '';
     console.error(err);
@@ -555,6 +581,7 @@
     el.archived.hidden = !DATA.repos.some((r) => !r.private && r.archived);
     el.forks.hidden = !DATA.repos.some((r) => !r.private && r.fork);
     renderHero(DATA);
+    renderTop(DATA.repos);
     renderSites(DATA.repos);
     renderLanguages(DATA.repos);
     renderRepos(DATA.repos, true);
