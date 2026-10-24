@@ -247,7 +247,8 @@
     const url = r.pages_url || fallback;
     try { return ignoredHost(new URL(url).hostname.toLowerCase()) ? null : url; } catch (e) { return null; }
   }
-  const isSite = (r) => r.has_pages && r.name.toLowerCase() !== SELF_REPO && !!pagesURL(r);
+  // Archived repositories never count as live sites, showcase topic or not.
+  const isSite = (r) => r.has_pages && !r.archived && r.name.toLowerCase() !== SELF_REPO && !!pagesURL(r);
 
   // A homepage link is shown only when it is a real http(s) URL, not the Pages
   // URL we already link to, and not on a domain listed as retired in SITE config.

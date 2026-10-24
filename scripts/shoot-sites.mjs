@@ -24,9 +24,9 @@ const PARALLEL = 4;
 
 const snap = JSON.parse(await readFile(`${OUT}/repos.json`, 'utf8'));
 const self = `${snap.owner}.github.io`.toLowerCase();
-// Same rule as pagesURL() in assets/app.js.
+// Same rule as isSite() and pagesURL() in assets/app.js.
 const sites = snap.repos
-  .filter((r) => r.has_pages && r.name.toLowerCase() !== self)
+  .filter((r) => r.has_pages && !r.archived && r.name.toLowerCase() !== self)
   .map((r) => ({ repo: r, url: r.pages_url || `https://${snap.owner}.github.io/${r.name}/` }));
 
 await rm(SHOTS, { recursive: true, force: true });

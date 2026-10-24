@@ -14,7 +14,8 @@ Live at **https://vardius.github.io/**
   deploys the site with GitHub Pages' Actions deployment.
 - If the snapshot is missing (local development, or Pages still deploying from
   the branch) the page falls back to the public GitHub API from the browser.
-- Repositories with GitHub Pages enabled are shown as "live sites". The
+- Repositories with GitHub Pages enabled are shown as "live sites", unless
+  they are archived. The
   snapshot asks the Pages API for each site's real address (custom domains
   included) and falls back to `https://vardius.github.io/<repo>/`. A
   repository's `homepage` field is only ever used as an extra "website" link.
@@ -34,7 +35,7 @@ repository itself. Two things switch it on:
 
 1. Add the `showcase` topic to that repository
    (`gh repo edit OWNER/REPO --add-topic showcase`, or the "About" gear on
-   GitHub). Remove the topic to unlist it.
+   GitHub). Remove the topic, or archive the repository, to unlist it.
 2. Once: create a fine-grained personal access token with **Metadata:
    Read-only** and **Pages: Read-only** on all repositories, and save it as
    the `SHOWCASE_TOKEN` secret of this repository (Settings → Secrets and

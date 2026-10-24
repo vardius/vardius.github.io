@@ -4,8 +4,9 @@
 #   data/repos.json   – every public repository owned by $OWNER (trimmed fields)
 #                       plus private repositories that opted in to the showcase:
 #                       GitHub Pages enabled AND tagged with the $SHOWCASE_TOPIC
-#                       topic. Private entries carry only name, description and
-#                       language with "private": true — no URLs into the repository.
+#                       topic AND not archived. Private entries carry only name,
+#                       description and language with "private": true — no URLs
+#                       into the repository.
 #   data/profile.json – login, name, bio, profile URL. Nothing else.
 #
 # Needs the GitHub CLI (`gh`) and `jq`. Public data works with any token,
@@ -47,7 +48,7 @@ echo "Looking for private repositories tagged '$SHOWCASE_TOPIC' with GitHub Page
 # in that case we simply end up with none.
 if gh api --paginate "user/repos?visibility=private&affiliation=owner&per_page=100" > "$TMP/private.raw.json" 2>/dev/null; then
   jq -s --arg topic "$SHOWCASE_TOPIC" '(add // [])
-    | map(select(.has_pages and ((.topics | index($topic)) != null)))
+    | map(select(.has_pages and (.archived | not) and ((.topics | index($topic)) != null)))
     | map({ name, description, language, pushed_at, topics: [], has_pages: true, private: true })' \
     "$TMP/private.raw.json" > "$TMP/private.json"
 else
