@@ -143,11 +143,15 @@
     return `<div class="shot" style="background:${fp.css}"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${s}</svg></div>`;
   }
 
-  // The real page, screenshotted at deploy time (scripts/shoot-sites.mjs). The
-  // drawn thumbnail stands in when there is no shot (live API, or it failed).
+  // The real page, screenshotted at deploy time (scripts/shoot-sites.mjs) in
+  // light and dark mode; CSS shows the one matching this page's theme, and lazy
+  // loading leaves the hidden one unfetched. The drawn thumbnail stands in when
+  // there is no shot (live API, or it failed).
   function preview(r) {
     if (!r.preview) return thumbnail(r.name);
-    return `<div class="shot" data-name="${esc(r.name)}"><img src="${esc(r.preview)}" width="800" height="500" alt="" loading="lazy" decoding="async"></div>`;
+    const img = (src, cls) => `<img${cls ? ` class="${cls}"` : ''} src="${esc(src)}" width="800" height="500" alt="" loading="lazy" decoding="async">`;
+    const both = r.preview_dark && r.preview_dark !== r.preview;
+    return `<div class="shot" data-name="${esc(r.name)}">${both ? img(r.preview, 'on-light') + img(r.preview_dark, 'on-dark') : img(r.preview)}</div>`;
   }
 
   function monogram(name) {
@@ -178,7 +182,8 @@
       license: license && license !== 'NOASSERTION' ? license : null,
       private: !!r.private,   // opted-in private repository: only its Pages site is shown
       pages_url: r.pages_url || null,   // resolved at snapshot time (custom domains)
-      preview: r.preview || null,       // screenshot of the Pages site, snapshot only
+      preview: r.preview || null,       // screenshots of the Pages site, snapshot only
+      preview_dark: r.preview_dark || null,
     };
   }
   function slimProfile(p) {

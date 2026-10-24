@@ -21,8 +21,8 @@ Live at **https://vardius.github.io/**
   repository's `homepage` field is only ever used as an extra "website" link.
   Domains listed in `window.SITE.ignoreDomains` are never linked to.
 - `scripts/shoot-sites.mjs` then screenshots every live site with the runner's
-  Google Chrome into `data/shots/`, so each site card shows the real page as of
-  the last deploy.
+  Google Chrome into `data/shots/`, in light and dark mode, so each site card
+  shows the real page as of the last deploy in this page's current theme.
 
 Nothing needs to be uploaded when a project is added: repository artwork is
 generated from the name, and a site whose screenshot is missing (live API

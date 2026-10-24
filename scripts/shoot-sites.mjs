@@ -2,10 +2,12 @@
 // Screenshots every GitHub Pages site in data/repos.json so the "Live on GitHub
 // Pages" cards show the real page instead of a drawn placeholder:
 //
-//   data/shots/<repo>.webp – the top of the page at 1280×800, saved at 800×500
+//   data/shots/light/<repo>.webp – the top of the page at 1280×800, saved at
+//   data/shots/dark/<repo>.webp    800×500, as a light- and a dark-mode visitor see it
 //
-// and records each one as `preview` on its repository in data/repos.json, with
-// a content hash so browsers fetch it again only when the page has changed.
+// and records them as `preview` and `preview_dark` on the repository in
+// data/repos.json, each with a content hash so browsers fetch it again only when
+// the page has changed. A site that looks the same in both modes gets one shot.
 // Best effort: a site that fails to load keeps its placeholder.
 //
 // Needs Google Chrome and the playwright-core package
@@ -30,13 +32,17 @@ const sites = snap.repos
   .map((r) => ({ repo: r, url: r.pages_url || `https://${snap.owner}.github.io/${r.name}/` }));
 
 await rm(SHOTS, { recursive: true, force: true });
-await mkdir(SHOTS, { recursive: true });
+await mkdir(`${SHOTS}/light`, { recursive: true });
+await mkdir(`${SHOTS}/dark`, { recursive: true });
 
 const browser = await chromium.launch({ channel: 'chrome' });
 // Entrance animations settle at once, so the shot shows the finished page.
-const context = await browser.newContext({ viewport: VIEWPORT, colorScheme: 'light', reducedMotion: 'reduce' });
+const contexts = {};
+for (const colorScheme of ['light', 'dark']) {
+  contexts[colorScheme] = await browser.newContext({ viewport: VIEWPORT, colorScheme, reducedMotion: 'reduce' });
+}
 
-async function shoot({ repo, url }) {
+async function capture(context, url) {
   const page = await context.newPage();
   try {
     const res = await page.goto(url, { waitUntil: 'load', timeout: 30000 });
@@ -53,16 +59,29 @@ async function shoot({ repo, url }) {
       format: 'webp', quality: 80,
       clip: { x: 0, y: 0, ...VIEWPORT, scale: SCALE },
     });
-    const file = `${repo.name}.webp`;
-    const img = Buffer.from(data, 'base64');
-    await writeFile(`${SHOTS}/${file}`, img);
-    const v = createHash('sha256').update(img).digest('hex').slice(0, 10);
-    repo.preview = `${SHOTS}/${encodeURIComponent(file)}?v=${v}`;
-    console.log(`  ${repo.name}: ${Math.round(img.length / 1024)} KB`);
-  } catch (e) {
-    console.log(`::warning title=No preview for ${repo.name}::${url}: ${e.message.split('\n')[0]}`);
+    return Buffer.from(data, 'base64');
   } finally {
     await page.close();
+  }
+}
+
+async function save(scheme, name, img) {
+  const file = `${scheme}/${encodeURIComponent(name)}.webp`;
+  await writeFile(`${SHOTS}/${scheme}/${name}.webp`, img);
+  const v = createHash('sha256').update(img).digest('hex').slice(0, 10);
+  return `${SHOTS}/${file}?v=${v}`;
+}
+
+async function shoot({ repo, url }) {
+  try {
+    const light = await capture(contexts.light, url);
+    const dark = await capture(contexts.dark, url);
+    repo.preview = await save('light', repo.name, light);
+    repo.preview_dark = dark.equals(light) ? repo.preview : await save('dark', repo.name, dark);
+    const kb = (b) => `${Math.round(b.length / 1024)} KB`;
+    console.log(`  ${repo.name}: ${kb(light)}${repo.preview_dark === repo.preview ? ', same in dark mode' : `, dark ${kb(dark)}`}`);
+  } catch (e) {
+    console.log(`::warning title=No preview for ${repo.name}::${url}: ${e.message.split('\n')[0]}`);
   }
 }
 
