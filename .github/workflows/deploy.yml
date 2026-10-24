@@ -1,5 +1,5 @@
-# Snapshots the public GitHub data this site renders and deploys the static
-# files to GitHub Pages. Runs on every push, once a day (so star counts and new
+# Snapshots the public GitHub data this site renders, screenshots each live
+# Pages site, and deploys the static files to GitHub Pages. Runs on every push, once a day (so star counts and new
 # repositories show up without a commit), and on demand.
 #
 # One-time setup: Settings → Pages → Source → "GitHub Actions".
@@ -39,12 +39,20 @@ jobs:
           SHOWCASE_TOPIC: showcase
         run: ./scripts/fetch-data.sh
 
+      - name: Screenshot the Pages sites
+        # Drives the runner's Google Chrome. Best effort: a site without a
+        # screenshot keeps its drawn placeholder, so this never blocks a deploy.
+        continue-on-error: true
+        run: |
+          npm install --no-save --no-package-lock playwright-core@1.64.1
+          node scripts/shoot-sites.mjs
+
       - name: Stage site
         run: |
           rsync -a \
             --exclude '.git' --exclude '.github' --exclude '.claude' \
             --exclude 'scripts' --exclude 'README.md' --exclude '.gitignore' \
-            --exclude '_site' \
+            --exclude '_site' --exclude 'node_modules' \
             ./ _site/
 
       - uses: actions/configure-pages@v6

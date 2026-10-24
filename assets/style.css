@@ -316,9 +316,10 @@ img, svg { display: block; max-width: 100%; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .shot-link { display: block; }
-.shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
-.shot svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
-.site-card:hover .shot svg { transform: scale(1.03); }
+.shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface); }
+.shot svg, .shot img { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
+.shot img { object-fit: cover; object-position: top; transform-origin: 50% 0; }
+.site-card:hover .shot svg, .site-card:hover .shot img { transform: scale(1.03); }
 .site-card .body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
 .site-card h3 { margin: 0; font-size: 1.05rem; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .site-card .body > p { margin: 0; color: var(--text-muted); font-size: .92rem; line-height: 1.5; }

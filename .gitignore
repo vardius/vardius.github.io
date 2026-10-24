@@ -2,3 +2,4 @@
 _site/
 data/
 .claude/
+node_modules/

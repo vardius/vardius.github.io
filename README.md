@@ -19,9 +19,13 @@ Live at **https://vardius.github.io/**
   included) and falls back to `https://vardius.github.io/<repo>/`. A
   repository's `homepage` field is only ever used as an extra "website" link.
   Domains listed in `window.SITE.ignoreDomains` are never linked to.
+- `scripts/shoot-sites.mjs` then screenshots every live site with the runner's
+  Google Chrome into `data/shots/`, so each site card shows the real page as of
+  the last deploy.
 
-Every card's artwork is generated from the repository name, so nothing needs to
-be uploaded when a project is added.
+Nothing needs to be uploaded when a project is added: repository artwork is
+generated from the name, and a site whose screenshot is missing (live API
+fallback, or the site failed to load) gets a drawn placeholder instead.
 
 ## Listing a site from a private repository
 
@@ -51,6 +55,12 @@ Then open http://127.0.0.1:4173/. To use a data snapshot instead of the live API
 
 ```bash
 OWNER=vardius ./scripts/fetch-data.sh
+```
+
+And to add the site screenshots (needs Google Chrome):
+
+```bash
+npm install --no-save --no-package-lock playwright-core@1.64.1 && node scripts/shoot-sites.mjs
 ```
 
 ## Configure

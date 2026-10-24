@@ -143,6 +143,13 @@
     return `<div class="shot" style="background:${fp.css}"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${s}</svg></div>`;
   }
 
+  // The real page, screenshotted at deploy time (scripts/shoot-sites.mjs). The
+  // drawn thumbnail stands in when there is no shot (live API, or it failed).
+  function preview(r) {
+    if (!r.preview) return thumbnail(r.name);
+    return `<div class="shot" data-name="${esc(r.name)}"><img src="${esc(r.preview)}" width="800" height="500" alt="" loading="lazy" decoding="async"></div>`;
+  }
+
   function monogram(name) {
     const parts = name.split(/[-_.\s]+/).filter(Boolean);
     return (parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2)).toUpperCase();
@@ -171,6 +178,7 @@
       license: license && license !== 'NOASSERTION' ? license : null,
       private: !!r.private,   // opted-in private repository: only its Pages site is shown
       pages_url: r.pages_url || null,   // resolved at snapshot time (custom domains)
+      preview: r.preview || null,       // screenshot of the Pages site, snapshot only
     };
   }
   function slimProfile(p) {
@@ -371,7 +379,7 @@
     const lang = r.language ? `<span><i class="lang-dot" style="background:${langColor(r.language)}"></i>${esc(r.language)}</span>` : '';
     return `<article class="card site-card reveal" style="--i:${Math.min(i, 8)}">
       <div class="chrome" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">${esc(shown)}</span></div>
-      <a class="shot-link" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Open ${esc(r.name)}">${thumbnail(r.name)}</a>
+      <a class="shot-link" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Open ${esc(r.name)}">${preview(r)}</a>
       <div class="body">
         <h3><a href="${esc(url)}" target="_blank" rel="noopener">${esc(r.name)}</a></h3>
         <p>${esc(r.description || 'No description yet.')}</p>
@@ -516,6 +524,11 @@
     };
     el.chips.addEventListener('click', pickLang);
     el.langbar.addEventListener('click', pickLang);
+    // a screenshot that fails to load gives way to the drawn thumbnail
+    el.sitesGrid.addEventListener('error', (e) => {
+      const shot = e.target.closest && e.target.closest('.shot[data-name]');
+      if (shot) shot.outerHTML = thumbnail(shot.dataset.name);
+    }, true);
     el.reset.addEventListener('click', () => {
       Object.assign(state, { q: '', lang: '', sort: 'stars' });
       syncControls();
