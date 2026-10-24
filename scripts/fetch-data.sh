@@ -24,6 +24,13 @@ trap 'rm -rf "$TMP"' EXIT
 
 mkdir -p "$OUT"
 
+# A dead token fails every call with HTTP 401; say which secret to renew instead
+# of letting the first jq choke on the error body.
+if ! gh api rate_limit --silent; then
+  echo "::error title=GitHub token rejected::If this run uses the SHOWCASE_TOKEN secret, it has expired or been revoked. Create a new token with the permissions listed in .github/workflows/deploy.yml and update the secret." >&2
+  exit 1
+fi
+
 echo "Fetching public repositories for @$OWNER…"
 gh api --paginate "users/$OWNER/repos?per_page=100&type=owner" \
   | jq -s '(add // []) | map({
