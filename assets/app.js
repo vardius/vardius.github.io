@@ -18,6 +18,7 @@
   );
   const OWNER = SITE.owner;
   const SELF_REPO = `${OWNER}.github.io`.toLowerCase();
+  const HIDE_TOPIC = 'no-showcase';   // keeps a repository's site off the live list
   const API = 'https://api.github.com';
   const CACHE_KEY = `gh:${OWNER}:v1`;
   const CACHE_TTL = 15 * 60 * 1000;
@@ -252,8 +253,10 @@
     const url = r.pages_url || fallback;
     try { return ignoredHost(new URL(url).hostname.toLowerCase()) ? null : url; } catch (e) { return null; }
   }
-  // Archived repositories never count as live sites, showcase topic or not.
-  const isSite = (r) => r.has_pages && !r.archived && r.name.toLowerCase() !== SELF_REPO && !!pagesURL(r);
+  // Archived repositories never count as live sites, showcase topic or not, and
+  // neither does one tagged HIDE_TOPIC.
+  const isSite = (r) => r.has_pages && !r.archived && !r.topics.includes(HIDE_TOPIC)
+    && r.name.toLowerCase() !== SELF_REPO && !!pagesURL(r);
 
   // A homepage link is shown only when it is a real http(s) URL, not the Pages
   // URL we already link to, and not on a domain listed as retired in SITE config.

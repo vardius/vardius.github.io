@@ -4,9 +4,10 @@
 #   data/repos.json   – every public repository owned by $OWNER (trimmed fields)
 #                       plus private repositories that opted in to the showcase:
 #                       GitHub Pages enabled AND tagged with the $SHOWCASE_TOPIC
-#                       topic AND not archived. Private entries carry only name,
-#                       description and language with "private": true — no URLs
-#                       into the repository.
+#                       topic AND not archived AND not tagged $HIDE_TOPIC.
+#                       Private entries carry only name, description and
+#                       language with "private": true — no URLs into the
+#                       repository.
 #   data/profile.json – login, name, bio, profile URL. Nothing else.
 #
 # Needs the GitHub CLI (`gh`) and `jq`. Public data works with any token,
@@ -19,6 +20,7 @@ set -euo pipefail
 OWNER="${OWNER:-vardius}"
 OUT="${OUT:-data}"
 SHOWCASE_TOPIC="${SHOWCASE_TOPIC:-showcase}"
+HIDE_TOPIC="${HIDE_TOPIC:-no-showcase}"   # also checked by isSite() in assets/app.js
 NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
@@ -47,8 +49,9 @@ echo "Looking for private repositories tagged '$SHOWCASE_TOPIC' with GitHub Page
 # The workflow's default GITHUB_TOKEN cannot list a user's private repositories;
 # in that case we simply end up with none.
 if gh api --paginate "user/repos?visibility=private&affiliation=owner&per_page=100" > "$TMP/private.raw.json" 2>/dev/null; then
-  jq -s --arg topic "$SHOWCASE_TOPIC" '(add // [])
-    | map(select(.has_pages and (.archived | not) and ((.topics | index($topic)) != null)))
+  jq -s --arg topic "$SHOWCASE_TOPIC" --arg hide "$HIDE_TOPIC" '(add // [])
+    | map(select(.has_pages and (.archived | not) and ((.topics | index($topic)) != null)
+                 and ((.topics | index($hide)) == null)))
     | map({ name, description, language, pushed_at, topics: [], has_pages: true, private: true })' \
     "$TMP/private.raw.json" > "$TMP/private.json"
 else

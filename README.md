@@ -15,7 +15,8 @@ Live at **https://vardius.github.io/**
 - If the snapshot is missing (local development, or Pages still deploying from
   the branch) the page falls back to the public GitHub API from the browser.
 - Repositories with GitHub Pages enabled are shown as "live sites", unless
-  they are archived. The
+  they are archived or have the `no-showcase` topic
+  (`gh repo edit OWNER/REPO --add-topic no-showcase`). The
   snapshot asks the Pages API for each site's real address (custom domains
   included) and falls back to `https://vardius.github.io/<repo>/`. A
   repository's `homepage` field is only ever used as an extra "website" link.
