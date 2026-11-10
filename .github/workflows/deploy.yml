@@ -60,6 +60,8 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
+          # .well-known/apple-app-site-association: the Palja app opens its chart and match links itself.
+          include-hidden-files: true
 
   deploy:
     needs: build
